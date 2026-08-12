@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: wastra-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - ML_SERVICE_URL=http://ml-service:8000
+    depends_on:
+      - mysql
+      - ml-service
+    networks:
+      - wastra-network
+
+  ml-service:
+    build:
+      context: ./apps/ml-service
+      dockerfile: Dockerfile
+    container_name: wastra-ml-service
+    ports:
+      - "8000:8000"
+    networks:
+      - wastra-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: wastra-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wastra_db
+      MYSQL_USER: wastra_user
+      MYSQL_PASSWORD: secretpassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - wastra-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: wastra-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    networks:
+      - wastra-network
+
+networks:
+  wastra-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
