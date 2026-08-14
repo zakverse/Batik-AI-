@@ -1,0 +1,2 @@
+model,stage,learning_rate,best_epoch,val_loss,val_accuracy,val_macro_precision,val_macro_recall,val_macro_f1,val_weighted_precision,val_weighted_recall,val_weighted_f1
+EfficientNetB0_FineTuned,Partial Fine-Tuning (Top 25 Layers),1e-05,6,0.5014435648918152,0.8663567693201627,0.8867082227560715,0.8677738971299139,0.868348406855333,0.8768170701695148,0.8663567693201627,0.8636908248410916
