@@ -1,0 +1,2 @@
+model,test_accuracy,test_loss,macro_precision,macro_recall,macro_f1,weighted_precision,weighted_recall,weighted_f1,test_samples,inference_time_seconds
+EfficientNetB0_FineTuned,0.8605461940732132,0.5111952424049377,0.8815762655391912,0.8660694666561243,0.866691318422983,0.8696212646575937,0.8605461940732132,0.8586776253946923,1721,32.38829469680786
