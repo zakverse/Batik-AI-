@@ -1,0 +1,14 @@
+true_class,pred_class,confidence,filepath
+batik-pekalongan,batik-parang,0.99733645,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-pekalongan\aug_0_795.jpeg
+batik-pekalongan,batik-parang,0.9958859,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-pekalongan\aug_0_218.jpeg
+batik-lasem,batik-tambal,0.9938963,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-lasem\aug_0_6593.jpeg
+batik-pekalongan,batik-parang,0.99330795,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-pekalongan\aug_0_8121.jpeg
+batik-ciamis,batik-priangan,0.9880735,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-ciamis\aug_0_974.jpeg
+batik-gentongan,batik-megamendung,0.9783478,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-gentongan\aug_0_8888.jpeg
+batik-sidomukti,batik-ceplok,0.9721204,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-sidomukti\aug_0_7111.jpeg
+batik-pekalongan,batik-parang,0.94878185,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-pekalongan\aug_0_4252.jpeg
+batik-sogan,batik-bali,0.94487417,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-sogan\aug_0_1199.jpeg
+batik-gentongan,Jawa_Timur_Pring,0.92854375,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-gentongan\aug_0_8436.jpeg
+batik-bali,batik-kawung,0.9192681,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-bali\aug_0_351.jpeg
+batik-sidomukti,Jawa_Timur_Pring,0.902161,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-sidomukti\aug_0_6799.jpeg
+batik-bali,batik-kawung,0.9003685,C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\datasets\raw\dataset_augmented\batik-bali\aug_0_1807.jpeg
