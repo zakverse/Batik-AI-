@@ -40,6 +40,9 @@ apps/mobile/.pub/
 apps/mobile/build/
 
 # Golang
+bin/
+*.exe
+*.dll
 apps/backend/bin/
 apps/backend/tmp/
 

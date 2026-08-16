@@ -1,0 +1,19 @@
+{
+  "model_name": "EfficientNetB0 Fine-Tuned",
+  "architecture": "EfficientNetB0",
+  "pretrained": "ImageNet",
+  "input_size": [
+    224,
+    224
+  ],
+  "channels": 3,
+  "num_classes": 35,
+  "training_stage": "Partial Fine-Tuning",
+  "unfrozen_layers": 20,
+  "learning_rate": 1e-05,
+  "optimizer": "Adam",
+  "loss": "SparseCategoricalCrossentropy",
+  "test_accuracy": 0.8605,
+  "macro_f1": 0.8667,
+  "weighted_f1": 0.8587
+}
