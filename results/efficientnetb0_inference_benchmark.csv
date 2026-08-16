@@ -1,0 +1,2 @@
+model_name,total_images,total_inference_time_seconds,avg_inference_time_ms_per_image,throughput_images_per_second,batch_size,hardware
+EfficientNetB0_FineTuned,1721,117.5624,68.31,14.64,64,CPU (Deterministic)
