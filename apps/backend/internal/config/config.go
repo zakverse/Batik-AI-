@@ -15,6 +15,7 @@ type Config struct {
 	ONNXLibPath      string
 	MaxUploadSizeMB  int64
 	DefaultTopK      int
+	AllowedOrigins   string
 }
 
 func LoadConfig() *Config {
@@ -32,10 +33,22 @@ func LoadConfig() *Config {
 	modelPath := getEnv("MODEL_PATH", filepath.Join(baseDir, "model", "efficientnetb0_finetuned.onnx"))
 	classMappingPath := getEnv("CLASS_MAPPING_PATH", filepath.Join(baseDir, "model", "efficientnetb0_class_mapping.json"))
 	metadataPath := getEnv("METADATA_PATH", filepath.Join(baseDir, "model", "efficientnetb0_model_metadata.json"))
-	onnxLibPath := getEnv("ONNX_LIB_PATH", filepath.Join(baseDir, "model", "onnxruntime.dll"))
+
+	// Support both ONNX_RUNTIME_PATH and ONNX_LIB_PATH
+	onnxLibDefault := filepath.Join(baseDir, "model", "onnxruntime.dll")
+	onnxLibPath := getEnv("ONNX_RUNTIME_PATH", getEnv("ONNX_LIB_PATH", onnxLibDefault))
 
 	maxUploadMB, _ := strconv.ParseInt(getEnv("MAX_UPLOAD_SIZE_MB", "10"), 10, 64)
+	if maxUploadMB <= 0 {
+		maxUploadMB = 10
+	}
+
 	defaultTopK, _ := strconv.Atoi(getEnv("DEFAULT_TOP_K", "3"))
+	if defaultTopK <= 0 || defaultTopK > 35 {
+		defaultTopK = 3
+	}
+
+	allowedOrigins := getEnv("ALLOWED_ORIGINS", "*")
 
 	return &Config{
 		Port:             port,
@@ -46,6 +59,7 @@ func LoadConfig() *Config {
 		ONNXLibPath:      onnxLibPath,
 		MaxUploadSizeMB:  maxUploadMB,
 		DefaultTopK:      defaultTopK,
+		AllowedOrigins:   allowedOrigins,
 	}
 }
 

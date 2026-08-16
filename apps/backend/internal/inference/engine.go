@@ -11,6 +11,17 @@ import (
 	"unsafe"
 )
 
+// toPointer safely converts a C-allocated address stored in uintptr to unsafe.Pointer
+// in compliance with Go pointer rules.
+func toPointer(p uintptr) unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Pointer(&p))
+}
+
+type ortApiBase struct {
+	GetApi           uintptr
+	GetVersionString uintptr
+}
+
 type Engine struct {
 	mu             sync.Mutex
 	dll            *syscall.LazyDLL
@@ -31,10 +42,10 @@ func (e *Engine) checkStatus(status uintptr) error {
 	getMsgFn := e.api[2]
 	msgPtr, _, _ := syscall.SyscallN(getMsgFn, status)
 	var msgBytes []byte
-	p := (*byte)(unsafe.Pointer(msgPtr))
-	for *p != 0 {
+	p := (*byte)(toPointer(msgPtr))
+	for p != nil && *p != 0 {
 		msgBytes = append(msgBytes, *p)
-		p = (*byte)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + 1))
+		p = (*byte)(unsafe.Add(toPointer(uintptr(unsafe.Pointer(p))), 1))
 	}
 	releaseStatusFn := e.api[93]
 	syscall.SyscallN(releaseStatusFn, status)
@@ -92,13 +103,13 @@ func NewEngine(modelPath, classMappingPath, metadataPath, dllPath string) (*Engi
 		return nil, fmt.Errorf("failed to call OrtGetApiBase: %v", err)
 	}
 
-	getApiFn := *(*uintptr)(unsafe.Pointer(basePtr))
-	apiPtr, _, _ := syscall.SyscallN(getApiFn, 18) // ORT_API_VERSION 18
+	base := (*ortApiBase)(toPointer(basePtr))
+	apiPtr, _, _ := syscall.SyscallN(base.GetApi, 18) // ORT_API_VERSION 18
 	if apiPtr == 0 {
 		return nil, fmt.Errorf("failed to get OrtApi pointer (version 18)")
 	}
 
-	api := (*[305]uintptr)(unsafe.Pointer(apiPtr))
+	api := (*[305]uintptr)(toPointer(apiPtr))
 	engine := &Engine{
 		dll:          dll,
 		api:          api,
@@ -210,13 +221,13 @@ func (e *Engine) Predict(inputFloats []float32, topK int) (*PredictionItem, []Pr
 	defer syscall.SyscallN(e.api[96], outputTensor) // ReleaseValue
 
 	// 3. Extract Output Data (index 51: GetTensorMutableData)
-	var outDataPtr uintptr
-	status, _, _ = syscall.SyscallN(e.api[51], outputTensor, uintptr(unsafe.Pointer(&outDataPtr)))
+	var outData unsafe.Pointer
+	status, _, _ = syscall.SyscallN(e.api[51], outputTensor, uintptr(unsafe.Pointer(&outData)))
 	if err := e.checkStatus(status); err != nil {
 		return nil, nil, fmt.Errorf("failed to get output tensor data: %w", err)
 	}
 
-	rawProbs := unsafe.Slice((*float32)(unsafe.Pointer(outDataPtr)), 35)
+	rawProbs := unsafe.Slice((*float32)(outData), 35)
 
 	// 4. Compute Softmax Probabilities
 	sum := 0.0

@@ -17,7 +17,7 @@ func SetupRouter(cfg *config.Config, engine *inference.Engine) *gin.Engine {
 	// Middlewares
 	router.Use(gin.Logger())
 	router.Use(middleware.RecoveryMiddleware())
-	router.Use(middleware.CORSMiddleware())
+	router.Use(middleware.CORSMiddleware(cfg.AllowedOrigins))
 
 	// Limit upload size (e.g. 10MB)
 	router.MaxMultipartMemory = cfg.MaxUploadSizeMB << 20
@@ -25,7 +25,7 @@ func SetupRouter(cfg *config.Config, engine *inference.Engine) *gin.Engine {
 	// Services & Handlers
 	predictService := service.NewPredictService(engine)
 	healthHandler := handler.NewHealthHandler(engine)
-	predictHandler := handler.NewPredictHandler(predictService, cfg.DefaultTopK)
+	predictHandler := handler.NewPredictHandler(predictService, cfg.DefaultTopK, cfg.MaxUploadSizeMB)
 	benchmarkHandler := handler.NewBenchmarkHandler(predictService)
 
 	// Health Check Endpoint

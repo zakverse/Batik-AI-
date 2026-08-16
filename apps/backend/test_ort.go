@@ -17,6 +17,15 @@ import (
 	"golang.org/x/image/draw"
 )
 
+func toPointer(p uintptr) unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Pointer(&p))
+}
+
+type ortApiBase struct {
+	GetApi           uintptr
+	GetVersionString uintptr
+}
+
 type OrtTestRunner struct {
 	dll            *syscall.LazyDLL
 	api            *[305]uintptr
@@ -34,10 +43,10 @@ func (r *OrtTestRunner) checkStatus(status uintptr) error {
 	getMsgFn := r.api[2]
 	msgPtr, _, _ := syscall.SyscallN(getMsgFn, status)
 	var msgBytes []byte
-	p := (*byte)(unsafe.Pointer(msgPtr))
-	for *p != 0 {
+	p := (*byte)(toPointer(msgPtr))
+	for p != nil && *p != 0 {
 		msgBytes = append(msgBytes, *p)
-		p = (*byte)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + 1))
+		p = (*byte)(unsafe.Add(toPointer(uintptr(unsafe.Pointer(p))), 1))
 	}
 	releaseStatusFn := r.api[93]
 	syscall.SyscallN(releaseStatusFn, status)
@@ -78,7 +87,6 @@ func main() {
 	fmt.Println("🧪 ONNX RUNTIME GO SERVING VALIDATION TEST (test_ort.go)")
 	fmt.Println("============================================================")
 
-	// Determine base directory
 	baseDir := "."
 	if _, err := os.Stat("model"); os.IsNotExist(err) {
 		if _, err := os.Stat("apps/backend/model"); err == nil {
@@ -104,24 +112,22 @@ func main() {
 		panic(fmt.Sprintf("❌ Failed to call OrtGetApiBase: %v", err))
 	}
 
-	getApiFn := *(*uintptr)(unsafe.Pointer(basePtr))
-	getVersionFn := *(*uintptr)(unsafe.Pointer(basePtr + 8))
-
-	verPtr, _, _ := syscall.SyscallN(getVersionFn)
+	base := (*ortApiBase)(toPointer(basePtr))
+	verPtr, _, _ := syscall.SyscallN(base.GetVersionString)
 	var verBytes []byte
-	vp := (*byte)(unsafe.Pointer(verPtr))
-	for *vp != 0 {
+	vp := (*byte)(toPointer(verPtr))
+	for vp != nil && *vp != 0 {
 		verBytes = append(verBytes, *vp)
-		vp = (*byte)(unsafe.Pointer(uintptr(unsafe.Pointer(vp)) + 1))
+		vp = (*byte)(unsafe.Add(toPointer(uintptr(unsafe.Pointer(vp))), 1))
 	}
 	versionStr := string(verBytes)
 	fmt.Printf("[PASS] ONNX Runtime Version: %s\n", versionStr)
 
-	apiPtr, _, _ := syscall.SyscallN(getApiFn, 18) // ORT_API_VERSION 18
+	apiPtr, _, _ := syscall.SyscallN(base.GetApi, 18) // ORT_API_VERSION 18
 	if apiPtr == 0 {
 		panic("❌ Failed to get OrtApi pointer for version 18")
 	}
-	api := (*[305]uintptr)(unsafe.Pointer(apiPtr))
+	api := (*[305]uintptr)(toPointer(apiPtr))
 
 	runner := &OrtTestRunner{
 		dll:           dll,
@@ -137,7 +143,7 @@ func main() {
 		panic(err)
 	}
 	runner.env = env
-	defer syscall.SyscallN(api[92], env) // ReleaseEnv
+	defer syscall.SyscallN(api[92], env)
 	fmt.Println("[PASS] ONNX Runtime Environment initialized")
 
 	// 4. Create Session Options
@@ -147,8 +153,8 @@ func main() {
 		panic(err)
 	}
 	runner.sessionOptions = sessionOptions
-	defer syscall.SyscallN(api[100], sessionOptions) // ReleaseSessionOptions
-	syscall.SyscallN(api[24], sessionOptions, 4)     // SetIntraOpNumThreads = 4
+	defer syscall.SyscallN(api[100], sessionOptions)
+	syscall.SyscallN(api[24], sessionOptions, 4)
 
 	// 5. Load Model into Session
 	if _, err := os.Stat(modelPath); os.IsNotExist(err) {
@@ -162,7 +168,7 @@ func main() {
 		panic(err)
 	}
 	runner.session = session
-	defer syscall.SyscallN(api[95], session) // ReleaseSession
+	defer syscall.SyscallN(api[95], session)
 	fmt.Printf("[PASS] Model loaded successfully: %s\n", modelPath)
 
 	// 6. Create Memory Info
@@ -172,7 +178,7 @@ func main() {
 		panic(err)
 	}
 	runner.memInfo = memInfo
-	defer syscall.SyscallN(api[94], memInfo) // ReleaseMemoryInfo
+	defer syscall.SyscallN(api[94], memInfo)
 
 	// 7. Load Class Mapping
 	mapData, err := os.ReadFile(mappingPath)
@@ -192,7 +198,7 @@ func main() {
 	}
 	fmt.Printf("[PASS] Class Mapping loaded: %d classes verified\n", len(classMap))
 
-	// Model input/output specifications
+	// Model specifications
 	fmt.Println("------------------------------------------------------------")
 	fmt.Println("MODEL SPECIFICATIONS:")
 	fmt.Println("  • Input Name  : input_1")
@@ -201,7 +207,7 @@ func main() {
 	fmt.Println("  • Output Shape: [1, 35] (float32 probabilities)")
 	fmt.Println("------------------------------------------------------------")
 
-	// 8. Find a real test sample image from datasets
+	// 8. Find a real test sample image
 	testSamplePath := ""
 	candidatePaths := []string{
 		"../../datasets/raw/dataset_augmented/batik-bali/aug_0_2655.jpeg",
@@ -246,7 +252,7 @@ func main() {
 	if err := runner.checkStatus(status); err != nil {
 		panic(err)
 	}
-	defer syscall.SyscallN(api[96], inputTensor) // ReleaseValue
+	defer syscall.SyscallN(api[96], inputTensor)
 
 	inputNameBytes, _ := syscall.BytePtrFromString("input_1")
 	outputNameBytes, _ := syscall.BytePtrFromString("predictions")
@@ -271,15 +277,15 @@ func main() {
 	}
 	infDuration := time.Since(t0)
 	outputTensor := outputs[0]
-	defer syscall.SyscallN(api[96], outputTensor) // ReleaseValue
+	defer syscall.SyscallN(api[96], outputTensor)
 
-	var outDataPtr uintptr
-	status, _, _ = syscall.SyscallN(api[51], outputTensor, uintptr(unsafe.Pointer(&outDataPtr)))
+	var outData unsafe.Pointer
+	status, _, _ = syscall.SyscallN(api[51], outputTensor, uintptr(unsafe.Pointer(&outData)))
 	if err := runner.checkStatus(status); err != nil {
 		panic(err)
 	}
 
-	rawProbs := unsafe.Slice((*float32)(unsafe.Pointer(outDataPtr)), 35)
+	rawProbs := unsafe.Slice((*float32)(outData), 35)
 
 	// Softmax Calculation
 	probs := make([]float64, 35)

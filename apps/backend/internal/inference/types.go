@@ -1,20 +1,20 @@
 package inference
 
 type ModelMetadata struct {
-	ModelName      string    `json:"model_name"`
-	Architecture   string    `json:"architecture"`
-	Pretrained     string    `json:"pretrained"`
-	InputSize      [2]int    `json:"input_size"`
-	Channels       int       `json:"channels"`
-	NumClasses     int       `json:"num_classes"`
-	TrainingStage  string    `json:"training_stage"`
-	UnfrozenLayers int       `json:"unfrozen_layers"`
-	LearningRate   float64   `json:"learning_rate"`
-	Optimizer      string    `json:"optimizer"`
-	Loss           string    `json:"loss"`
-	TestAccuracy   float64   `json:"test_accuracy"`
-	MacroF1        float64   `json:"macro_f1"`
-	WeightedF1     float64   `json:"weighted_f1"`
+	ModelName      string  `json:"model_name"`
+	Architecture   string  `json:"architecture"`
+	Pretrained     string  `json:"pretrained"`
+	InputSize      [2]int  `json:"input_size"`
+	Channels       int     `json:"channels"`
+	NumClasses     int     `json:"num_classes"`
+	TrainingStage  string  `json:"training_stage"`
+	UnfrozenLayers int     `json:"unfrozen_layers"`
+	LearningRate   float64 `json:"learning_rate"`
+	Optimizer      string  `json:"optimizer"`
+	Loss           string  `json:"loss"`
+	TestAccuracy   float64 `json:"test_accuracy"`
+	MacroF1        float64 `json:"macro_f1"`
+	WeightedF1     float64 `json:"weighted_f1"`
 }
 
 type PredictionItem struct {
