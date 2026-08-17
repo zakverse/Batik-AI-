@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+import 'core/theme/app_theme.dart';
+import 'screens/home_screen.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: WastraApp(),
-    ),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Set preferred orientation to portrait
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(const WastraApp());
 }
 
 class WastraApp extends StatelessWidget {
@@ -15,16 +21,10 @@ class WastraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wastra AI',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6B4226)),
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('🌿 Wastra AI Mobile Client Initialized'),
-        ),
-      ),
+      title: 'Wastra AI Batik',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      home: const HomeScreen(),
     );
   }
 }

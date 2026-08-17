@@ -1,1 +1,0 @@
-// GoRouter configuration placeholder
