@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Flutter\flutter_windows_3.44.6-stable\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\apps\mobile"
-export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=C:\Users\dzaki\OneDrive\Dokumen\Bahasa Pemograman\Python\Batik\apps\mobile\ios\Flutter\ephemeral\Packages\.packages\FlutterFramework"
+export "FLUTTER_APPLICATION_PATH=Z:\Projects\Batik\apps\mobile"
+export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=Z:\Projects\Batik\apps\mobile\ios\Flutter\ephemeral\Packages\.packages\FlutterFramework"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"
