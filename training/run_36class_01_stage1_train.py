@@ -51,7 +51,7 @@ def main():
     tf.random.set_seed(RANDOM_STATE)
 
     # File Paths (Isolated 36-Class Artifacts)
-    metadata_path = DATASETS_DIR / "split_metadata_36class.csv"
+    metadata_path = DATASETS_DIR / "split_metadata_36class_fixed.csv"
     stage1_output_model_path = SAVED_MODELS_DIR / "efficientnetb0_36class.keras"
     history_csv_path = RESULTS_DIR / "efficientnetb0_36class_stage1_history.csv"
     training_curves_path = RESULTS_DIR / "efficientnetb0_36class_stage1_training_curves.png"

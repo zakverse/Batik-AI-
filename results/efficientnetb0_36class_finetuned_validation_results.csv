@@ -1,0 +1,2 @@
+model,val_loss,val_accuracy,test_loss,test_accuracy
+EfficientNetB0 36-Class Fine-Tuned,0.5185937881469727,0.855195939540863,0.5202573537826538,0.8648495078086853

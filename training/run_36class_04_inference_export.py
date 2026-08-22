@@ -29,7 +29,7 @@ def main():
     RESULTS_DIR = BASE_DIR / "results"
     BACKEND_MODEL_DIR = BASE_DIR / "apps" / "backend" / "model"
 
-    metadata_path = DATASETS_DIR / "split_metadata_36class.csv"
+    metadata_path = DATASETS_DIR / "split_metadata_36class_fixed.csv"
     model_path = SAVED_MODELS_DIR / "efficientnetb0_36class_finetuned.keras"
     class_mapping_path = RESULTS_DIR / "efficientnetb0_36class_class_mapping.json"
     model_metadata_path = RESULTS_DIR / "efficientnetb0_36class_model_metadata.json"

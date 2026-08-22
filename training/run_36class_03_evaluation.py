@@ -30,7 +30,7 @@ def main():
     SAVED_MODELS_DIR = BASE_DIR / "training" / "saved_models"
     RESULTS_DIR = BASE_DIR / "results"
 
-    metadata_path = DATASETS_DIR / "split_metadata_36class.csv"
+    metadata_path = DATASETS_DIR / "split_metadata_36class_fixed.csv"
     model_path = SAVED_MODELS_DIR / "efficientnetb0_36class_finetuned.keras"
 
     report_csv_path = RESULTS_DIR / "efficientnetb0_36class_finetuned_classification_report.csv"

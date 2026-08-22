@@ -34,7 +34,7 @@ def main():
     ROOT_MODELS_DIR = BASE_DIR / "models"
     RESULTS_DIR = BASE_DIR / "results"
 
-    metadata_path = DATASETS_DIR / "split_metadata_36class.csv"
+    metadata_path = DATASETS_DIR / "split_metadata_36class_fixed.csv"
     keras_model_path = ROOT_MODELS_DIR / "efficientnetb0_36class_finetuned.keras"
     onnx_saved_model_path = MODELS_DIR / "efficientnetb0_36class_finetuned.onnx"
     onnx_root_model_path = ROOT_MODELS_DIR / "efficientnetb0_36class_finetuned.onnx"
