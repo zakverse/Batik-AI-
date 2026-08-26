@@ -8,14 +8,14 @@ class ApiConfig {
   // Default to Android Emulator address (can be updated for physical device or iOS)
   static const String baseUrl = 'http://10.0.2.2:8080';
 
-  // API Endpoints
-  static const String predictEndpoint = '$baseUrl/api/v1/predict';
-  static const String healthEndpoint = '$baseUrl/health';
+  // API Endpoints (36-Class Modern V2 API)
+  static const String predictEndpoint = '$baseUrl/api/v2/predict';
+  static const String healthEndpoint = '$baseUrl/api/v2/health';
 
   // Timeout settings
   static const Duration requestTimeout = Duration(seconds: 30);
 
-  // Helper to build Predict URI with query parameters
+  // Helper to build Predict URI with query parameters (top_k between 1 and 36)
   static Uri predictUri({int topK = 3}) {
     return Uri.parse('$predictEndpoint?top_k=$topK');
   }

@@ -48,7 +48,7 @@ void main() {
 
       final mockClient = MockClient((request) async {
         expect(request.method, 'POST');
-        expect(request.url.path, '/api/v1/predict');
+        expect(request.url.path, '/api/v2/predict');
         expect(request.url.queryParameters['top_k'], '3');
         return http.Response(mockResponse, 200, headers: {'content-type': 'application/json'});
       });

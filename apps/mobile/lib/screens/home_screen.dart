@@ -1,289 +1,243 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import '../core/data/batik_heritage_data.dart';
 import '../core/theme/app_theme.dart';
-import '../widgets/image_source_button.dart';
-import 'preview_screen.dart';
+import '../widgets/motif_card.dart';
+import '../widgets/motif_hero_card.dart';
+import '../widgets/region_chip.dart';
+import 'encyclopedia_screen.dart';
+import 'motif_detail_screen.dart';
+import 'scanner_screen.dart';
 
-/// HomeScreen is the main landing page of Wastra AI Batik.
+/// HomeScreen renders the Heritage Dashboard with Motif of the Day and trending cultural archives.
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final VoidCallback? onScanPressed;
+
+  const HomeScreen({
+    super.key,
+    this.onScanPressed,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ImagePicker _picker = ImagePicker();
-  bool _isPicking = false;
+  String _selectedRegion = 'Semua';
 
-  Future<void> _pickImage(ImageSource source) async {
-    if (_isPicking) return;
+  static const List<String> _regions = [
+    'Semua',
+    'Jawa',
+    'Sumatera',
+    'Bali',
+    'Kalimantan',
+    'Papua',
+    'Maluku',
+  ];
 
-    setState(() {
-      _isPicking = true;
-    });
-
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: source,
-        maxWidth: 1920,
-        maxHeight: 1920,
-        imageQuality: 90,
-      );
-
-      if (!mounted) return;
-
-      if (pickedFile != null) {
-        final imageFile = File(pickedFile.path);
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => PreviewScreen(imageFile: imageFile),
-          ),
-        );
-      }
-    } on PlatformException catch (e) {
-      if (!mounted) return;
-      _showErrorSnackBar(
-        'Izin akses tidak diberikan atau dibatalkan (${e.code}).',
-      );
-    } catch (e) {
-      if (!mounted) return;
-      _showErrorSnackBar('Gagal memilih gambar: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isPicking = false;
-        });
-      }
+  List<BatikHeritageItem> get _trendingList {
+    if (_selectedRegion == 'Semua') {
+      return BatikHeritageData.trendingMotifs;
     }
+    return BatikHeritageData.allMotifs
+        .where((item) => item.island.toLowerCase() == _selectedRegion.toLowerCase())
+        .toList();
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red[800],
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
-  void _showAboutDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
-          children: [
-            Icon(Icons.palette_rounded, color: AppTheme.primaryColor),
-            SizedBox(width: 10),
-            Text(
-              'Tentang Wastra AI',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-          ],
-        ),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Wastra AI Batik adalah platform pengenalan motif batik nusantara menggunakan model AI EfficientNetB0.',
-              style: TextStyle(height: 1.4),
-            ),
-            SizedBox(height: 12),
-            Text(
-              '• 35 Kelas Motif Batik\n'
-              '• Akurasi Model: 86.05%\n'
-              '• Backend: Golang + ONNX Runtime',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.black87,
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text(
-              'Tutup',
-              style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void _openScan() {
+    if (widget.onScanPressed != null) {
+      widget.onScanPressed!();
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const ScannerScreen()),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final trending = _trendingList;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Wastra AI Batik'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline_rounded),
-            tooltip: 'Tentang Aplikasi',
-            onPressed: _showAboutDialog,
-          ),
-        ],
-      ),
+      backgroundColor: AppTheme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 10),
-
-              // Hero Banner Card
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      AppTheme.secondaryColor,
-                      Color(0xFF2C4A70),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.secondaryColor.withValues(alpha: 0.3),
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppTheme.tertiaryColor.withValues(alpha: 0.25),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: AppTheme.tertiaryColor.withValues(alpha: 0.5),
+              // 1. Top Editorial Header Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'WARISAN NUSANTARA',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.2,
+                          color: AppTheme.primaryColor.withValues(alpha: 0.9),
                         ),
                       ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.auto_awesome,
-                            size: 14,
-                            color: AppTheme.tertiaryColor,
-                          ),
-                          SizedBox(width: 6),
-                          Text(
-                            'AI Vision Classifier',
-                            style: TextStyle(
-                              color: AppTheme.tertiaryColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                            ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'Wastra AI',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1C1B1F),
+                          letterSpacing: -0.6,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const EncyclopediaScreen()),
+                      );
+                    },
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.15),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Kenali Motif Batik Indonesia',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.5,
-                        height: 1.25,
+                      child: const Icon(
+                        Icons.menu_book_rounded,
+                        color: AppTheme.primaryColor,
+                        size: 20,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Unggah atau potret kain batik untuk mengenali motif tradisional nusantara secara instan dengan kecerdasan buatan.',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
-                        fontSize: 13.5,
-                        height: 1.45,
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 18),
+
+              // 2. Search Shortcut Bar
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const EncyclopediaScreen()),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.black.withValues(alpha: 0.07)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
                       ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.search_rounded,
+                        color: AppTheme.primaryColor,
+                        size: 22,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Cari motif, daerah, pulau...',
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          '36 KELAS',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.onPrimaryContainer,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 3. Featured Hero Card: MOTIF OF THE DAY
+              MotifHeroCard(
+                item: BatikHeritageData.motifOfTheDay,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const MotifDetailScreen(
+                        item: BatikHeritageData.motifOfTheDay,
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              // 4. Quick Scan Camera Banner Card
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: AppTheme.tertiaryColor.withValues(alpha: 0.3),
+                    width: 1.2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Action Section Title
-              Text(
-                'Pilih Metode Input',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF1C1B1F),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Gunakan kamera langsung atau pilih dari album galeri',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Camera Button
-              ImageSourceButton(
-                icon: Icons.photo_camera_rounded,
-                title: 'Ambil Foto',
-                subtitle: 'Potret kain batik secara langsung',
-                isPrimary: true,
-                onTap: _isPicking ? null : () => _pickImage(ImageSource.camera),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Gallery Button
-              ImageSourceButton(
-                icon: Icons.photo_library_rounded,
-                title: 'Pilih dari Galeri',
-                subtitle: 'Ambil gambar batik dari memori perangkat',
-                isPrimary: false,
-                onTap: _isPicking ? null : () => _pickImage(ImageSource.gallery),
-              ),
-
-              const SizedBox(height: 36),
-
-              // Info Feature Highlights
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.black.withValues(alpha: 0.06),
-                  ),
-                ),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.verified_rounded,
-                      color: AppTheme.primaryColor,
-                      size: 28,
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        gradient: AppTheme.sogaGradient,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(
+                        Icons.photo_camera_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -291,28 +245,139 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            '35 Ragam Motif Terdata',
+                            'Pindai Kain Batik Anda',
                             style: TextStyle(
+                              fontSize: 14.5,
                               fontWeight: FontWeight.w700,
-                              fontSize: 14,
                               color: Color(0xFF1C1B1F),
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Mencakup motif Bali, Megamendung, Parang, Kawung, Keraton, Pala, dan lainnya.',
+                            'Kenali motif nusantara secara instan dengan AI',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
-                              height: 1.35,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: _openScan,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        backgroundColor: AppTheme.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Pindai',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                      ),
+                    ),
                   ],
                 ),
               ),
+
+              const SizedBox(height: 28),
+
+              // 5. Region/Category Filter Chips
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Kategori Wilayah',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF1C1B1F),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const EncyclopediaScreen()),
+                      );
+                    },
+                    child: const Text(
+                      'Lihat Semua',
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.primaryColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              SizedBox(
+                height: 38,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _regions.length,
+                  itemBuilder: (context, index) {
+                    final r = _regions[index];
+                    return RegionChip(
+                      label: r,
+                      isSelected: _selectedRegion == r,
+                      onTap: () {
+                        setState(() {
+                          _selectedRegion = r;
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 22),
+
+              // 6. Trending Motifs Section
+              Text(
+                _selectedRegion == 'Semua' ? 'Motif Populer Nusantara' : 'Motif Wilayah $_selectedRegion',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF1C1B1F),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              SizedBox(
+                height: 195,
+                child: trending.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Tidak ada motif untuk wilayah $_selectedRegion',
+                          style: TextStyle(color: Colors.grey[500]),
+                        ),
+                      )
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: trending.length,
+                        itemBuilder: (context, index) {
+                          final item = trending[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 14),
+                            child: MotifCard(
+                              item: item,
+                              isCompact: true,
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MotifDetailScreen(item: item),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+              ),
+
+              const SizedBox(height: 24),
             ],
           ),
         ),

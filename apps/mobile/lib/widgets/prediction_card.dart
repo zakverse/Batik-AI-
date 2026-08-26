@@ -3,7 +3,7 @@ import '../core/theme/app_theme.dart';
 import '../models/prediction_response.dart';
 import 'confidence_bar.dart';
 
-/// PredictionCard renders the top detected batik motif and the breakdown of top possibilities.
+/// PredictionCard renders the top detected batik motif (or Non-Batik state) and the breakdown of top possibilities.
 class PredictionCard extends StatelessWidget {
   final PredictionResponse response;
 
@@ -23,16 +23,20 @@ class PredictionCard extends StatelessWidget {
     }
 
     final mainPrediction = topPrediction ?? topList.first;
+    final isBatik = mainPrediction.isBatik;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Main Detected Motif Card
+        // Main Detected Card (Batik vs Non-Batik)
         Card(
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: AppTheme.primaryColor, width: 1.2),
+            side: BorderSide(
+              color: isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor,
+              width: 1.2,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -44,17 +48,17 @@ class PredictionCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          Icons.auto_awesome,
-                          color: AppTheme.tertiaryColor,
+                        Icon(
+                          isBatik ? Icons.auto_awesome : Icons.info_outline_rounded,
+                          color: isBatik ? AppTheme.tertiaryColor : AppTheme.secondaryColor,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'MOTIF TERDETEKSI',
+                          isBatik ? 'MOTIF TERDETEKSI' : 'BUKAN KAIN BATIK',
                           style: theme.textTheme.labelLarge?.copyWith(
                             letterSpacing: 1.1,
-                            color: AppTheme.primaryColor,
+                            color: isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -64,15 +68,15 @@ class PredictionCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryContainer,
+                        color: isBatik ? AppTheme.primaryContainer : AppTheme.secondaryContainer,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         mainPrediction.confidencePercentage,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: AppTheme.onPrimaryContainer,
+                          color: isBatik ? AppTheme.onPrimaryContainer : AppTheme.onSecondaryContainer,
                         ),
                       ),
                     ),
@@ -80,17 +84,28 @@ class PredictionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  mainPrediction.formattedClassName.toUpperCase(),
+                  isBatik ? mainPrediction.formattedClassName.toUpperCase() : 'NON-BATIK',
                   style: theme.textTheme.headlineMedium?.copyWith(
                     color: const Color(0xFF1C1B1F),
                     fontWeight: FontWeight.w800,
                     fontSize: 24,
                   ),
                 ),
-                const SizedBox(height: 10),
+                if (!isBatik) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    'Gambar tidak teridentifikasi sebagai motif kain batik nusantara.',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey[700],
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 12),
                 ConfidenceBar(
                   confidence: mainPrediction.normalizedConfidence,
                   height: 10,
+                  barColor: isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor,
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -117,7 +132,7 @@ class PredictionCard extends StatelessWidget {
 
         const SizedBox(height: 16),
 
-        // Top 3 Possibilities Breakdown Card
+        // Top Possibilities Breakdown Card
         if (topList.isNotEmpty) ...[
           Card(
             shape: RoundedRectangleBorder(
@@ -129,14 +144,14 @@ class PredictionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Top Kemungkinan Motif',
+                    'Peringkat Klasifikasi AI',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Peringkat probabilitas klasifikasi AI:',
+                    'Probabilitas tertinggi dari model 36-kelas:',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontSize: 12.5,
                       color: Colors.grey[600],
@@ -159,7 +174,7 @@ class PredictionCard extends StatelessWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: rankNumber == 1
-                                      ? AppTheme.primaryColor
+                                      ? (item.isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor)
                                       : Colors.grey[200],
                                   shape: BoxShape.circle,
                                 ),
@@ -193,7 +208,7 @@ class PredictionCard extends StatelessWidget {
                                   fontSize: 13.5,
                                   fontWeight: FontWeight.w700,
                                   color: rankNumber == 1
-                                      ? AppTheme.primaryColor
+                                      ? (item.isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor)
                                       : Colors.grey[700],
                                 ),
                               ),
@@ -206,7 +221,7 @@ class PredictionCard extends StatelessWidget {
                               confidence: item.normalizedConfidence,
                               height: 6,
                               barColor: rankNumber == 1
-                                  ? AppTheme.primaryColor
+                                  ? (item.isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor)
                                   : (rankNumber == 2
                                       ? AppTheme.secondaryColor
                                       : Colors.grey[400]),

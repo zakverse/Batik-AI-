@@ -19,9 +19,9 @@ void main() {
 
       // Candidate paths for sample image
       final candidatePaths = [
-        '../../datasets/raw/dataset_augmented/batik-bali/aug_0_2655.jpeg',
-        'datasets/raw/dataset_augmented/batik-bali/aug_0_2655.jpeg',
-        '../datasets/raw/dataset_augmented/batik-bali/aug_0_2655.jpeg',
+        '../../datasets/raw/dataset_augmented/batik-bali/aug_0_7577.jpeg',
+        'datasets/raw/dataset_augmented/batik-bali/aug_0_7577.jpeg',
+        '../datasets/raw/dataset_augmented/batik-bali/aug_0_7577.jpeg',
       ];
 
       File? sampleFile;
@@ -35,38 +35,54 @@ void main() {
 
       expect(sampleFile, isNotNull, reason: 'Sample batik image file must exist');
 
-      // Test parsing the real response payload
+      // Test parsing the real response payload (v2 format)
       final realResponseMap = {
         "success": true,
         "prediction": {
-          "class": "batik-bali",
-          "confidence": 0.8998
+          "class_id": 2,
+          "label": "batik-bali",
+          "confidence": 0.8998,
+          "is_batik": true
         },
         "top_predictions": [
           {
-            "class": "batik-bali",
-            "confidence": 0.8998
+            "class_id": 2,
+            "label": "batik-bali",
+            "confidence": 0.8998,
+            "is_batik": true
           },
           {
-            "class": "Maluku_Pala",
-            "confidence": 0.0351
+            "class_id": 19,
+            "label": "Maluku_Pala",
+            "confidence": 0.0351,
+            "is_batik": true
           },
           {
-            "class": "batik-keraton",
-            "confidence": 0.0151
+            "class_id": 11,
+            "label": "batik-keraton",
+            "confidence": 0.0151,
+            "is_batik": true
           }
-        ]
+        ],
+        "model": {
+          "name": "efficientnetb0",
+          "version": "36-class",
+          "runtime": "onnx"
+        }
       };
 
       final parsed = PredictionResponse.fromJson(realResponseMap);
       expect(parsed.success, isTrue);
-      expect(parsed.prediction?.className, 'batik-bali');
+      expect(parsed.prediction?.classId, 2);
+      expect(parsed.prediction?.label, 'batik-bali');
+      expect(parsed.prediction?.isBatik, isTrue);
       expect(parsed.prediction?.formattedClassName, 'Batik Bali');
       expect(parsed.prediction?.confidencePercentage, '89.98%');
       expect(parsed.topPredictions.length, 3);
       expect(parsed.topPredictions[0].formattedClassName, 'Batik Bali');
       expect(parsed.topPredictions[1].formattedClassName, 'Maluku Pala');
       expect(parsed.topPredictions[2].formattedClassName, 'Batik Keraton');
+      expect(parsed.model?.version, '36-class');
     });
   });
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// AppTheme provides cohesive Material 3 theming for Wastra AI Batik,
-/// featuring rich Indonesian batik-inspired earth and indigo tones.
+/// featuring rich Indonesian batik-inspired earth, indigo, and golden accents.
 class AppTheme {
   // Primary Batik Colors
   static const Color primaryColor = Color(0xFF8D4925); // Deep Soga / Terracotta
@@ -13,14 +13,47 @@ class AppTheme {
   static const Color onSecondaryContainer = Color(0xFF091E3A);
 
   static const Color tertiaryColor = Color(0xFFC8963E); // Golden Batik Accents
+  static const Color tertiaryContainer = Color(0xFFFAF1E4);
+  static const Color onTertiaryContainer = Color(0xFF4A340A);
+
   static const Color surfaceColor = Color(0xFFFDFCFA);
   static const Color cardColor = Colors.white;
-  static const Color scaffoldBackgroundColor = Color(0xFFF7F5F0);
+  static const Color scaffoldBackgroundColor = Color(0xFFF7F5F0); // Warm Parchment
+  static const Color darkSurfaceColor = Color(0xFF11141A); // Museum Noir / Scanner Dark
+  static const Color darkCardColor = Color(0xFF1C222D);
 
   // Success & Accent Colors
   static const Color confidenceHigh = Color(0xFF2E7D32); // Deep Green
   static const Color confidenceMedium = Color(0xFFE65100); // Amber/Orange
   static const Color confidenceLow = Color(0xFFC62828); // Crimson
+
+  // Gradients
+  static const LinearGradient heroGradient = LinearGradient(
+    colors: [
+      Color(0xFF1D3557),
+      Color(0xFF2D4B73),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient sogaGradient = LinearGradient(
+    colors: [
+      Color(0xFF8D4925),
+      Color(0xFFA65A31),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient goldGradient = LinearGradient(
+    colors: [
+      Color(0xFFC8963E),
+      Color(0xFFE4B768),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 
   static ThemeData get lightTheme {
     const colorScheme = ColorScheme.light(
@@ -76,7 +109,7 @@ class AppTheme {
           elevation: 1,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
           textStyle: const TextStyle(
             fontSize: 15,
@@ -91,7 +124,7 @@ class AppTheme {
           side: const BorderSide(color: primaryColor, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
           textStyle: const TextStyle(
             fontSize: 15,
@@ -100,9 +133,15 @@ class AppTheme {
         ),
       ),
       textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.w800,
+          color: Color(0xFF1C1B1F),
+          letterSpacing: -0.8,
+        ),
         headlineMedium: TextStyle(
           fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w800,
           color: Color(0xFF1C1B1F),
           letterSpacing: -0.5,
         ),
@@ -119,15 +158,16 @@ class AppTheme {
         bodyLarge: TextStyle(
           fontSize: 15,
           color: Color(0xFF49454F),
-          height: 1.4,
+          height: 1.45,
         ),
         bodyMedium: TextStyle(
           fontSize: 13.5,
           color: Color(0xFF49454F),
+          height: 1.35,
         ),
         labelLarge: TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

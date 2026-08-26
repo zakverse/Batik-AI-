@@ -20,23 +20,30 @@ class PreviewScreen extends StatefulWidget {
   State<PreviewScreen> createState() => _PreviewScreenState();
 }
 
-class _PreviewScreenState extends State<PreviewScreen> {
+class _PreviewScreenState extends State<PreviewScreen>
+    with SingleTickerProviderStateMixin {
   late File _currentImage;
   late final ApiService _apiService;
   final ImagePicker _picker = ImagePicker();
 
   bool _isAnalyzing = false;
   String? _errorMessage;
+  late AnimationController _pulseController;
 
   @override
   void initState() {
     super.initState();
     _currentImage = widget.imageFile;
     _apiService = widget.apiService ?? ApiService();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
+    _pulseController.dispose();
     if (widget.apiService == null) {
       _apiService.dispose();
     }
@@ -165,8 +172,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Pratinjau Gambar'),
+        title: const Text('Pratinjau Citra Kain'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -174,15 +182,15 @@ class _PreviewScreenState extends State<PreviewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Image Preview Card
+              // Image Viewport Frame
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 6),
                     ),
                   ],
                 ),
@@ -201,23 +209,46 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           child: const Text('Gagal memuat pratinjau gambar'),
                         ),
                       ),
+
+                      // Scanning Overlay when analyzing
                       if (_isAnalyzing)
                         Container(
-                          color: Colors.black.withValues(alpha: 0.55),
-                          child: const Column(
+                          color: Colors.black.withValues(alpha: 0.65),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                strokeWidth: 3.5,
+                              Container(
+                                width: 64,
+                                height: 64,
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppTheme.tertiaryColor,
+                                    width: 2.5,
+                                  ),
+                                ),
+                                child: const CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(AppTheme.tertiaryColor),
+                                  strokeWidth: 3,
+                                ),
                               ),
-                              SizedBox(height: 16),
-                              Text(
-                                'Sedang menganalisis motif batik...',
+                              const SizedBox(height: 20),
+                              const Text(
+                                'ANALISIS 36 KELAS AKTIF...',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'Mendeteksi ornamen motif & filter non-batik',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 12.5,
                                 ),
                               ),
                             ],
@@ -230,12 +261,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
               const SizedBox(height: 16),
 
-              // File Details Card
+              // File Metadata Row
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: Colors.black.withValues(alpha: 0.06)),
                 ),
                 child: Row(
@@ -270,7 +301,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFDECEA),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: const Color(0xFFF5C6CB)),
                   ),
                   child: Row(
@@ -325,7 +356,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         ),
                       )
                     : const Icon(Icons.search_rounded),
-                label: Text(_isAnalyzing ? 'Menganalisis...' : 'Analisis Motif'),
+                label: Text(_isAnalyzing ? 'Menganalisis 36 Kelas...' : 'Analisis Motif Batik'),
                 onPressed: _isAnalyzing ? null : _analyzeMotif,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
