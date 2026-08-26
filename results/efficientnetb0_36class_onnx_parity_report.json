@@ -1,0 +1,57 @@
+{
+  "model_name": "efficientnetb0_36class_finetuned",
+  "conversion_status": "SUCCESS",
+  "timestamp": "2026-08-26 17:04:41",
+  "source_keras_model": {
+    "path": "Z:\\Projects\\Batik\\training\\saved_models\\efficientnetb0_36class_finetuned.keras",
+    "file_size_bytes": 29282417,
+    "file_size_mb": 27.93,
+    "input_shape": [
+      null,
+      224,
+      224,
+      3
+    ],
+    "output_shape": [
+      null,
+      36
+    ]
+  },
+  "target_onnx_model": {
+    "root_path": "Z:\\Projects\\Batik\\models\\efficientnetb0_36class_finetuned.onnx",
+    "saved_models_path": "Z:\\Projects\\Batik\\training\\saved_models\\efficientnetb0_36class_finetuned.onnx",
+    "file_size_bytes": 16298612,
+    "file_size_mb": 15.54,
+    "input_name": "input_1",
+    "input_shape": [
+      "unk__1298",
+      224,
+      224,
+      3
+    ],
+    "output_name": "predictions",
+    "output_shape": [
+      "unk__1299",
+      36
+    ],
+    "onnx_checker": "PASSED"
+  },
+  "parity_metrics": {
+    "total_samples_evaluated": 113,
+    "prediction_agreement_count": 113,
+    "prediction_agreement_rate_percent": 100.0,
+    "max_absolute_difference": 3.397465e-06,
+    "mean_absolute_difference": 2.157851e-08,
+    "mean_cosine_similarity": 1.00000001,
+    "tolerance_threshold": "< 1e-4",
+    "parity_status": "PASS"
+  },
+  "non_batik_validation": {
+    "class_id": 35,
+    "label": "non_batik",
+    "samples_tested": 8,
+    "prediction_matches": 8,
+    "parity_rate_percent": 100.0,
+    "status": "PASS"
+  }
+}

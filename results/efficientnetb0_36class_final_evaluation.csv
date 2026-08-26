@@ -1,0 +1,2 @@
+model,test_samples,num_classes,test_loss,accuracy,macro_precision,macro_recall,macro_f1,weighted_precision,weighted_recall,weighted_f1,non_batik_precision,non_batik_recall,non_batik_f1,eval_time_sec
+EfficientNetB0_36class_finetuned,1761,36,0.5135,0.8648,0.8857,0.8688,0.8707,0.8746,0.8648,0.8637,1.0,1.0,1.0,31.19

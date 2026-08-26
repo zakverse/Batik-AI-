@@ -1,0 +1,529 @@
+{
+  "model_name": "efficientnetb0_36class_finetuned.keras",
+  "dataset": "split_metadata_36class_fixed.csv",
+  "split": "test",
+  "timestamp": "2026-08-26 16:54:51",
+  "total_test_samples": 1761,
+  "num_classes": 36,
+  "overall_metrics": {
+    "test_loss": 0.5135,
+    "accuracy": 0.8648,
+    "accuracy_percent": 86.48,
+    "macro_precision": 0.8857,
+    "macro_recall": 0.8688,
+    "macro_f1": 0.8707,
+    "weighted_precision": 0.8746,
+    "weighted_recall": 0.8648,
+    "weighted_f1": 0.8637,
+    "eval_duration_seconds": 31.19
+  },
+  "non_batik_performance": {
+    "class_id": 35,
+    "label": "non_batik",
+    "test_samples": 40,
+    "true_positives": 40,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "false_negative_details": [],
+    "false_positive_details": []
+  },
+  "top_performing_classes": [
+    {
+      "class_id": 35,
+      "class_name": "non_batik",
+      "support": 40,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "class_id": 24,
+      "class_name": "Kalimantan_Dayak",
+      "support": 37,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "class_id": 31,
+      "class_name": "Papua_Tifa",
+      "support": 37,
+      "precision": 0.9737,
+      "recall": 1.0,
+      "f1_score": 0.9867
+    },
+    {
+      "class_id": 26,
+      "class_name": "Madura_Mataketeran",
+      "support": 38,
+      "precision": 0.95,
+      "recall": 1.0,
+      "f1_score": 0.9744
+    },
+    {
+      "class_id": 29,
+      "class_name": "Papua_Asmat",
+      "support": 37,
+      "precision": 0.973,
+      "recall": 0.973,
+      "f1_score": 0.973
+    }
+  ],
+  "bottom_performing_classes": [
+    {
+      "class_id": 9,
+      "class_name": "batik-gentongan",
+      "support": 51,
+      "precision": 0.85,
+      "recall": 0.6667,
+      "f1_score": 0.7473
+    },
+    {
+      "class_id": 2,
+      "class_name": "batik-bali",
+      "support": 135,
+      "precision": 0.6832,
+      "recall": 0.8148,
+      "f1_score": 0.7432
+    },
+    {
+      "class_id": 12,
+      "class_name": "batik-lasem",
+      "support": 39,
+      "precision": 0.8276,
+      "recall": 0.6154,
+      "f1_score": 0.7059
+    },
+    {
+      "class_id": 7,
+      "class_name": "batik-ciamis",
+      "support": 41,
+      "precision": 1.0,
+      "recall": 0.5366,
+      "f1_score": 0.6984
+    },
+    {
+      "class_id": 15,
+      "class_name": "batik-pekalongan",
+      "support": 48,
+      "precision": 0.5254,
+      "recall": 0.6458,
+      "f1_score": 0.5794
+    }
+  ],
+  "top_misclassifications": [
+    {
+      "true_class": "batik-bali",
+      "predicted_class": "batik-pekalongan",
+      "true_class_id": 2,
+      "predicted_class_id": 15,
+      "count": 14,
+      "rate_relative_to_support": 0.1037
+    },
+    {
+      "true_class": "batik-keraton",
+      "predicted_class": "batik-bali",
+      "true_class_id": 11,
+      "predicted_class_id": 2,
+      "count": 11,
+      "rate_relative_to_support": 0.25
+    },
+    {
+      "true_class": "batik-pekalongan",
+      "predicted_class": "batik-bali",
+      "true_class_id": 15,
+      "predicted_class_id": 2,
+      "count": 10,
+      "rate_relative_to_support": 0.2083
+    },
+    {
+      "true_class": "batik-betawi",
+      "predicted_class": "batik-pekalongan",
+      "true_class_id": 3,
+      "predicted_class_id": 15,
+      "count": 5,
+      "rate_relative_to_support": 0.0376
+    },
+    {
+      "true_class": "batik-ciamis",
+      "predicted_class": "batik-priangan",
+      "true_class_id": 7,
+      "predicted_class_id": 16,
+      "count": 5,
+      "rate_relative_to_support": 0.122
+    },
+    {
+      "true_class": "batik-priangan",
+      "predicted_class": "batik-bali",
+      "true_class_id": 16,
+      "predicted_class_id": 2,
+      "count": 5,
+      "rate_relative_to_support": 0.0962
+    },
+    {
+      "true_class": "batik-betawi",
+      "predicted_class": "Sumatera_Barat_Rumah_Minang",
+      "true_class_id": 3,
+      "predicted_class_id": 33,
+      "count": 4,
+      "rate_relative_to_support": 0.0301
+    },
+    {
+      "true_class": "batik-ciamis",
+      "predicted_class": "Sumatera_Barat_Rumah_Minang",
+      "true_class_id": 7,
+      "predicted_class_id": 33,
+      "count": 4,
+      "rate_relative_to_support": 0.0976
+    },
+    {
+      "true_class": "batik-kawung",
+      "predicted_class": "batik-parang",
+      "true_class_id": 10,
+      "predicted_class_id": 14,
+      "count": 4,
+      "rate_relative_to_support": 0.0976
+    },
+    {
+      "true_class": "batik-pekalongan",
+      "predicted_class": "batik-parang",
+      "true_class_id": 15,
+      "predicted_class_id": 14,
+      "count": 4,
+      "rate_relative_to_support": 0.0833
+    },
+    {
+      "true_class": "batik-bali",
+      "predicted_class": "batik-parang",
+      "true_class_id": 2,
+      "predicted_class_id": 14,
+      "count": 3,
+      "rate_relative_to_support": 0.0222
+    },
+    {
+      "true_class": "batik-betawi",
+      "predicted_class": "DKI_Ondel_Ondel",
+      "true_class_id": 3,
+      "predicted_class_id": 22,
+      "count": 3,
+      "rate_relative_to_support": 0.0226
+    },
+    {
+      "true_class": "batik-cendrawasih",
+      "predicted_class": "batik-priangan",
+      "true_class_id": 5,
+      "predicted_class_id": 16,
+      "count": 3,
+      "rate_relative_to_support": 0.0612
+    },
+    {
+      "true_class": "batik-ciamis",
+      "predicted_class": "batik-bali",
+      "true_class_id": 7,
+      "predicted_class_id": 2,
+      "count": 3,
+      "rate_relative_to_support": 0.0732
+    },
+    {
+      "true_class": "batik-gentongan",
+      "predicted_class": "batik-bali",
+      "true_class_id": 9,
+      "predicted_class_id": 2,
+      "count": 3,
+      "rate_relative_to_support": 0.0588
+    }
+  ],
+  "per_class_summary": [
+    {
+      "class_id": 0,
+      "class_name": "Aceh_Pintu_Aceh",
+      "support": 37,
+      "precision": 0.9615,
+      "recall": 0.6757,
+      "f1_score": 0.7937
+    },
+    {
+      "class_id": 1,
+      "class_name": "Bali_Barong",
+      "support": 35,
+      "precision": 1.0,
+      "recall": 0.8286,
+      "f1_score": 0.9062
+    },
+    {
+      "class_id": 2,
+      "class_name": "batik-bali",
+      "support": 135,
+      "precision": 0.6832,
+      "recall": 0.8148,
+      "f1_score": 0.7432
+    },
+    {
+      "class_id": 3,
+      "class_name": "batik-betawi",
+      "support": 133,
+      "precision": 0.9417,
+      "recall": 0.8496,
+      "f1_score": 0.8933
+    },
+    {
+      "class_id": 4,
+      "class_name": "batik-celup",
+      "support": 50,
+      "precision": 0.9792,
+      "recall": 0.94,
+      "f1_score": 0.9592
+    },
+    {
+      "class_id": 5,
+      "class_name": "batik-cendrawasih",
+      "support": 49,
+      "precision": 0.878,
+      "recall": 0.7347,
+      "f1_score": 0.8
+    },
+    {
+      "class_id": 6,
+      "class_name": "batik-ceplok",
+      "support": 34,
+      "precision": 0.8929,
+      "recall": 0.7353,
+      "f1_score": 0.8065
+    },
+    {
+      "class_id": 7,
+      "class_name": "batik-ciamis",
+      "support": 41,
+      "precision": 1.0,
+      "recall": 0.5366,
+      "f1_score": 0.6984
+    },
+    {
+      "class_id": 8,
+      "class_name": "batik-garutan",
+      "support": 50,
+      "precision": 0.9333,
+      "recall": 0.84,
+      "f1_score": 0.8842
+    },
+    {
+      "class_id": 9,
+      "class_name": "batik-gentongan",
+      "support": 51,
+      "precision": 0.85,
+      "recall": 0.6667,
+      "f1_score": 0.7473
+    },
+    {
+      "class_id": 10,
+      "class_name": "batik-kawung",
+      "support": 41,
+      "precision": 0.8974,
+      "recall": 0.8537,
+      "f1_score": 0.875
+    },
+    {
+      "class_id": 11,
+      "class_name": "batik-keraton",
+      "support": 44,
+      "precision": 0.9355,
+      "recall": 0.6591,
+      "f1_score": 0.7733
+    },
+    {
+      "class_id": 12,
+      "class_name": "batik-lasem",
+      "support": 39,
+      "precision": 0.8276,
+      "recall": 0.6154,
+      "f1_score": 0.7059
+    },
+    {
+      "class_id": 13,
+      "class_name": "batik-megamendung",
+      "support": 37,
+      "precision": 0.9189,
+      "recall": 0.9189,
+      "f1_score": 0.9189
+    },
+    {
+      "class_id": 14,
+      "class_name": "batik-parang",
+      "support": 124,
+      "precision": 0.8889,
+      "recall": 0.9677,
+      "f1_score": 0.9266
+    },
+    {
+      "class_id": 15,
+      "class_name": "batik-pekalongan",
+      "support": 48,
+      "precision": 0.5254,
+      "recall": 0.6458,
+      "f1_score": 0.5794
+    },
+    {
+      "class_id": 16,
+      "class_name": "batik-priangan",
+      "support": 52,
+      "precision": 0.7407,
+      "recall": 0.7692,
+      "f1_score": 0.7547
+    },
+    {
+      "class_id": 17,
+      "class_name": "batik-sekar",
+      "support": 48,
+      "precision": 0.86,
+      "recall": 0.8958,
+      "f1_score": 0.8776
+    },
+    {
+      "class_id": 18,
+      "class_name": "batik-sidoluhur",
+      "support": 46,
+      "precision": 0.8511,
+      "recall": 0.8696,
+      "f1_score": 0.8602
+    },
+    {
+      "class_id": 19,
+      "class_name": "batik-sidomukti",
+      "support": 42,
+      "precision": 0.8571,
+      "recall": 0.8571,
+      "f1_score": 0.8571
+    },
+    {
+      "class_id": 20,
+      "class_name": "batik-sogan",
+      "support": 45,
+      "precision": 0.907,
+      "recall": 0.8667,
+      "f1_score": 0.8864
+    },
+    {
+      "class_id": 21,
+      "class_name": "batik-tambal",
+      "support": 51,
+      "precision": 0.8393,
+      "recall": 0.9216,
+      "f1_score": 0.8785
+    },
+    {
+      "class_id": 22,
+      "class_name": "DKI_Ondel_Ondel",
+      "support": 38,
+      "precision": 0.9048,
+      "recall": 1.0,
+      "f1_score": 0.95
+    },
+    {
+      "class_id": 23,
+      "class_name": "Jawa_Timur_Pring",
+      "support": 38,
+      "precision": 0.8,
+      "recall": 0.9474,
+      "f1_score": 0.8675
+    },
+    {
+      "class_id": 24,
+      "class_name": "Kalimantan_Dayak",
+      "support": 37,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "class_id": 25,
+      "class_name": "Lampung_Gajah",
+      "support": 37,
+      "precision": 0.9189,
+      "recall": 0.9189,
+      "f1_score": 0.9189
+    },
+    {
+      "class_id": 26,
+      "class_name": "Madura_Mataketeran",
+      "support": 38,
+      "precision": 0.95,
+      "recall": 1.0,
+      "f1_score": 0.9744
+    },
+    {
+      "class_id": 27,
+      "class_name": "Maluku_Pala",
+      "support": 37,
+      "precision": 0.9024,
+      "recall": 1.0,
+      "f1_score": 0.9487
+    },
+    {
+      "class_id": 28,
+      "class_name": "NTB_Lumbung",
+      "support": 38,
+      "precision": 0.8837,
+      "recall": 1.0,
+      "f1_score": 0.9383
+    },
+    {
+      "class_id": 29,
+      "class_name": "Papua_Asmat",
+      "support": 37,
+      "precision": 0.973,
+      "recall": 0.973,
+      "f1_score": 0.973
+    },
+    {
+      "class_id": 30,
+      "class_name": "Papua_Cendrawasih",
+      "support": 38,
+      "precision": 0.9268,
+      "recall": 1.0,
+      "f1_score": 0.962
+    },
+    {
+      "class_id": 31,
+      "class_name": "Papua_Tifa",
+      "support": 37,
+      "precision": 0.9737,
+      "recall": 1.0,
+      "f1_score": 0.9867
+    },
+    {
+      "class_id": 32,
+      "class_name": "Sulawesi_Selatan_Lontara",
+      "support": 38,
+      "precision": 0.8409,
+      "recall": 0.9737,
+      "f1_score": 0.9024
+    },
+    {
+      "class_id": 33,
+      "class_name": "Sumatera_Barat_Rumah_Minang",
+      "support": 38,
+      "precision": 0.717,
+      "recall": 1.0,
+      "f1_score": 0.8352
+    },
+    {
+      "class_id": 34,
+      "class_name": "Sumatera_Utara_Boraspati",
+      "support": 38,
+      "precision": 0.9268,
+      "recall": 1.0,
+      "f1_score": 0.962
+    },
+    {
+      "class_id": 35,
+      "class_name": "non_batik",
+      "support": 40,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  ]
+}

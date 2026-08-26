@@ -1,0 +1,6 @@
+mode,batch_size,iterations,mean_latency_ms,std_latency_ms,min_latency_ms,max_latency_ms,p50_latency_ms,p90_latency_ms,p95_latency_ms,p99_latency_ms,throughput_fps
+Single Image (Keras CPU),1,100,563.42,389.57,174.21,1265.5,247.35,1008.41,1047.61,1264.8,1.77
+Batch Size 8 (Keras CPU),8,20,495.88,27.89,455.29,545.11,494.19,542.19,542.95,544.67,16.13
+Batch Size 16 (Keras CPU),16,20,698.32,31.93,646.38,754.11,696.82,738.43,752.27,753.74,22.91
+Batch Size 32 (Keras CPU),32,20,1214.75,110.18,1060.61,1402.85,1201.69,1349.79,1389.29,1400.14,26.34
+Batch Size 64 (Keras CPU),64,20,1848.77,121.45,1715.24,2080.4,1789.26,2050.85,2059.5,2076.22,34.62
