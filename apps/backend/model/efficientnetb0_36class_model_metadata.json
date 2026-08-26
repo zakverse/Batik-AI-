@@ -1,0 +1,75 @@
+{
+  "model_name": "EfficientNetB0_36class_finetuned",
+  "model_file": "efficientnetb0_36class_finetuned.keras",
+  "architecture": "EfficientNetB0",
+  "pretrained_weights": "imagenet",
+  "input_shape": [
+    224,
+    224,
+    3
+  ],
+  "input_size": [
+    224,
+    224
+  ],
+  "channels": 3,
+  "color_mode": "rgb",
+  "output_shape": [
+    null,
+    36
+  ],
+  "num_classes": 36,
+  "class_id_range": [
+    0,
+    35
+  ],
+  "non_batik_class_id": 35,
+  "non_batik_class_label": "non_batik",
+  "preprocessing_pipeline": {
+    "resize_method": "bilinear",
+    "target_size": [
+      224,
+      224
+    ],
+    "normalization": "keras.applications.efficientnet.preprocess_input",
+    "input_range": "[0.0, 255.0] float32"
+  },
+  "training_specifications": {
+    "stage_1_transfer_learning": {
+      "backbone": "frozen",
+      "epochs": 12,
+      "learning_rate": 0.001,
+      "optimizer": "adam",
+      "loss": "categorical_crossentropy"
+    },
+    "stage_2_fine_tuning": {
+      "unfrozen_top_layers": 25,
+      "epochs": 6,
+      "learning_rate": 1e-05,
+      "optimizer": "adam",
+      "loss": "categorical_crossentropy"
+    }
+  },
+  "test_evaluation_metrics": {
+    "test_samples": 1761,
+    "test_loss": 0.5135,
+    "accuracy": 0.8648,
+    "accuracy_percent": 86.48,
+    "macro_precision": 0.8857,
+    "macro_recall": 0.8688,
+    "macro_f1": 0.8707,
+    "weighted_precision": 0.8746,
+    "weighted_recall": 0.8648,
+    "weighted_f1": 0.8637,
+    "non_batik_performance": {
+      "test_samples": 40,
+      "true_positives": 40,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  },
+  "exported_timestamp": "2026-08-26 16:57:35"
+}

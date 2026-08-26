@@ -57,7 +57,7 @@ func setupTestRouter(t *testing.T) (*gin.Engine, *inference.Engine) {
 		t.Fatalf("Failed to initialize test engine: %v", err)
 	}
 
-	router := routes.SetupRouter(cfg, engine)
+	router := routes.SetupRouter(cfg, engine, nil)
 	return router, engine
 }
 

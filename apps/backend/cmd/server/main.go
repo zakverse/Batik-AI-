@@ -24,30 +24,50 @@ func main() {
 	fmt.Println("[PASS] Config loaded successfully")
 
 	// 2. Startup Validation & Engine Initialization
-	engine, err := inference.NewEngine(
-		cfg.ModelPath,
-		cfg.ClassMappingPath,
-		cfg.MetadataPath,
+	var engine *inference.Engine
+	var engine36 *inference.Engine36
+
+	// 2a. Initialize 35-Class Legacy Engine (if model exists)
+	if _, err := os.Stat(cfg.ModelPath); err == nil {
+		e, err := inference.NewEngine(
+			cfg.ModelPath,
+			cfg.ClassMappingPath,
+			cfg.MetadataPath,
+			cfg.ONNXLibPath,
+		)
+		if err != nil {
+			log.Printf("⚠️ WARNING: Legacy 35-class engine initialization failed: %v", err)
+		} else {
+			engine = e
+			defer engine.Close()
+			meta := engine.GetMetadata()
+			fmt.Println("[PASS] 35-Class Legacy Model loaded: " + cfg.ModelPath)
+			fmt.Printf("[PASS] 35-Class Metadata: %s (Test Acc: %.2f%%, Macro F1: %.4f)\n", meta.ModelName, meta.TestAccuracy*100, meta.MacroF1)
+		}
+	}
+
+	// 2b. Initialize 36-Class Modern Engine
+	e36, err := inference.NewEngine36(
+		cfg.Model36Path,
+		cfg.ClassMapping36Path,
+		cfg.Metadata36Path,
 		cfg.ONNXLibPath,
 	)
 	if err != nil {
-		log.Fatalf("❌ STARTUP ERROR: Failed to initialize ONNX Engine:\n   %v\n", err)
+		log.Fatalf("❌ STARTUP ERROR: Failed to initialize 36-Class ONNX Engine:\n   %v\n", err)
 	}
-	defer engine.Close()
+	engine36 = e36
+	defer engine36.Close()
 
-	meta := engine.GetMetadata()
-	classCount := engine.GetClassCount()
-
-	fmt.Println("[PASS] Model file exists & verified: " + cfg.ModelPath)
+	fmt.Println("[PASS] 36-Class Modern Model loaded: " + cfg.Model36Path)
+	fmt.Printf("[PASS] 36-Class Classes: %d classes (Class 35 = non_batik)\n", engine36.GetClassCount())
 	fmt.Println("[PASS] ONNX Runtime initialized with shared library: " + cfg.ONNXLibPath)
-	fmt.Printf("[PASS] Class mapping loaded: %d classes detected\n", classCount)
-	fmt.Printf("[PASS] Metadata verified: %s (Test Acc: %.2f%%, Macro F1: %.4f)\n", meta.ModelName, meta.TestAccuracy*100, meta.MacroF1)
 	fmt.Println("[PASS] Input shape verified: 224x224x3 (RGB float32)")
-	fmt.Println("[PASS] Output shape verified: 35 classes")
+	fmt.Println("[PASS] Output shape verified: 36 classes")
 	fmt.Println("============================================================")
 
-	// 3. Setup Routes
-	router := routes.SetupRouter(cfg, engine)
+	// 3. Setup Routes (Dual Engine Architecture)
+	router := routes.SetupRouter(cfg, engine, engine36)
 
 	addr := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 	srv := &http.Server{
@@ -62,9 +82,13 @@ func main() {
 	go func() {
 		fmt.Printf("🌐 Server listening on http://%s\n", addr)
 		fmt.Println("Available Endpoints:")
-		fmt.Println("  • GET  /health")
-		fmt.Println("  • POST /api/v1/predict   (field: 'image', optional 'top_k')")
-		fmt.Println("  • POST /api/v1/benchmark (field: 'image', optional 'iterations')")
+		fmt.Println("  • GET  /health              (Legacy 35-Class Health)")
+		fmt.Println("  • POST /api/v1/predict      (Legacy 35-Class Prediction)")
+		fmt.Println("  • POST /api/v1/benchmark    (Legacy 35-Class Benchmark)")
+		fmt.Println("  • GET  /api/v2/health       (Modern 36-Class Health)")
+		fmt.Println("  • POST /api/v2/predict      (Modern 36-Class Prediction)")
+		fmt.Println("  • POST /api/v2/predict/batik(Modern 36-Class Prediction Alias)")
+		fmt.Println("  • POST /api/v2/benchmark    (Modern 36-Class Benchmark)")
 		fmt.Println("============================================================")
 
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
