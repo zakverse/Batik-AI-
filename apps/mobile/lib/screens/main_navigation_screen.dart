@@ -4,7 +4,14 @@ import 'home_screen.dart';
 import 'profile_screen.dart';
 import 'scanner_screen.dart';
 
-/// MainNavigationScreen orchestrates the 3-item navigation between Beranda, Scan, and Profil.
+/// MainNavigationScreen — 3-tab structure:
+/// Tab 0: Beranda (HomeScreen)
+/// Center FAB: Scan (ScannerScreen) — pushes as modal route
+/// Tab 1: Profil (ProfileScreen)
+///
+/// Encyclopedia is reachable via:
+///   Home → Quick Action "Eksplor Motif"
+///   Profile → Menu "Ensiklopedia Motif"
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 

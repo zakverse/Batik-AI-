@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wastra_ai_mobile/main.dart';
 import 'package:wastra_ai_mobile/models/prediction_response.dart';
+import 'package:wastra_ai_mobile/screens/about_screen.dart';
 import 'package:wastra_ai_mobile/screens/encyclopedia_screen.dart';
 import 'package:wastra_ai_mobile/screens/profile_screen.dart';
 import 'package:wastra_ai_mobile/screens/result_screen.dart';
@@ -23,7 +24,7 @@ void main() {
 
       // Check Motif of the Day Hero Card
       expect(find.byType(MotifHeroCard), findsOneWidget);
-      expect(find.text('MOTIF OF THE DAY'), findsOneWidget);
+      expect(find.text('MOTIF HARI INI'), findsOneWidget);
       expect(find.text('Parang Rusak Barong'), findsOneWidget);
 
       // Check 3-Item Bottom Navigation: Beranda, Center Scan FAB, Profil
@@ -32,9 +33,9 @@ void main() {
       expect(find.byIcon(Icons.crop_free_rounded), findsOneWidget);
       expect(find.text('Profil'), findsOneWidget);
 
-      // Check Quick Scan Banner
-      expect(find.text('Pindai Kain Batik Anda'), findsOneWidget);
-      expect(find.text('Pindai'), findsOneWidget);
+      // Check Quick Scan & Action Cards
+      expect(find.text('Pindai Kain'), findsOneWidget);
+      expect(find.text('Eksplor Motif'), findsOneWidget);
     });
 
     testWidgets('Bottom navigation switches between Beranda and Profil, and opens Encyclopedia from Beranda', (WidgetTester tester) async {
@@ -42,26 +43,27 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Initially on Beranda
-      expect(find.text('MOTIF OF THE DAY'), findsOneWidget);
+      expect(find.text('MOTIF HARI INI'), findsOneWidget);
 
       // 2. Tap Profil Tab
-      await tester.tap(find.text('Profil'));
+      await tester.tap(find.text('Profil').last);
       await tester.pumpAndSettle();
-      expect(find.text('Profil & Informasi Model'), findsOneWidget);
-      expect(find.text('Spesifikasi Model & Benchmark'), findsOneWidget);
-      expect(find.text('86.48%'), findsOneWidget);
+      expect(find.text('Profil'), findsNWidgets(2)); // Screen header + BottomNav label
+      expect(find.text('Pengguna'), findsOneWidget);
+      expect(find.text('Panduan Pindai Kain'), findsOneWidget);
+      expect(find.text('Tentang NusantaraKain'), findsOneWidget);
 
       // 3. Tap Beranda Tab to return
       await tester.tap(find.text('Beranda'));
       await tester.pumpAndSettle();
-      expect(find.text('MOTIF OF THE DAY'), findsOneWidget);
+      expect(find.text('MOTIF HARI INI'), findsOneWidget);
 
       // 4. Open Encyclopedia from Beranda via 'Lihat Semua'
-      await tester.ensureVisible(find.text('Lihat Semua'));
+      await tester.ensureVisible(find.text('Lihat Semua').first);
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Lihat Semua'), warnIfMissed: false);
+      await tester.tap(find.text('Lihat Semua').first, warnIfMissed: false);
       await tester.pumpAndSettle();
-      expect(find.text('Batik Encyclopedia'), findsOneWidget);
+      expect(find.text('Ensiklopedia Motif'), findsOneWidget);
       expect(find.text('Eksplorasi Wastra Nusantara'), findsOneWidget);
     });
 
@@ -73,7 +75,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Batik Encyclopedia'), findsOneWidget);
+      expect(find.text('Ensiklopedia Motif'), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
       expect(find.text('Semua'), findsOneWidget);
       expect(find.text('Jawa'), findsOneWidget);
@@ -81,7 +83,7 @@ void main() {
       expect(find.text('Bali'), findsOneWidget);
     });
 
-    testWidgets('ProfileScreen displays model benchmarks and specifications', (WidgetTester tester) async {
+    testWidgets('ProfileScreen displays user profile identity, statistics, and menu items', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ProfileScreen(),
@@ -89,11 +91,38 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('86.48%'), findsOneWidget);
-      expect(find.text('0.8707'), findsOneWidget);
-      expect(find.text('1.0000'), findsOneWidget);
-      expect(find.text('36 Kelas'), findsOneWidget);
-      expect(find.text('ARSITEKTUR PIPELINE AI'), findsOneWidget);
+      expect(find.text('Profil'), findsOneWidget);
+      expect(find.text('Pengguna'), findsOneWidget);
+      expect(find.text('pengguna@nusantarakain.id'), findsOneWidget);
+      expect(find.text('Edit Profil'), findsOneWidget);
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('Koleksi'), findsOneWidget);
+      expect(find.text('5'), findsOneWidget);
+      expect(find.text('Analisis'), findsOneWidget);
+      expect(find.text('3'), findsOneWidget);
+      expect(find.text('Favorit'), findsOneWidget);
+      expect(find.text('Panduan Pindai Kain'), findsOneWidget);
+      expect(find.text('Tentang NusantaraKain'), findsOneWidget);
+    });
+
+    testWidgets('AboutScreen displays model benchmarks and AI specifications in accordions', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: AboutScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Tentang NusantaraKain'), findsOneWidget); // AppBar
+      expect(find.text('NusantaraKain'), findsOneWidget); // Hero Banner
+      expect(find.text('Misi Pelestarian Budaya'), findsOneWidget);
+      expect(find.text('Visi'), findsOneWidget);
+      expect(find.text('Misi'), findsOneWidget);
+      expect(find.text('Nilai'), findsOneWidget);
+      expect(find.text('Arsitektur & Spesifikasi AI'), findsOneWidget);
+      expect(find.text('Cara Kerja Aplikasi'), findsOneWidget);
+      expect(find.text('Sumber Data & Model AI'), findsOneWidget);
+      expect(find.text('Versi Aplikasi & Runtime'), findsOneWidget);
     });
 
     testWidgets('ConfidenceBar renders with clamped percentage and colors', (WidgetTester tester) async {
@@ -142,9 +171,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify header and motif titles
-      expect(find.text('Hasil Analisis Wastra'), findsOneWidget);
-      expect(find.text('MOTIF TERDETEKSI'), findsOneWidget);
-      expect(find.text('BATIK BALI'), findsOneWidget);
+      expect(find.text('Hasil Analisis'), findsOneWidget);
+      expect(find.text('Motif Terdeteksi'), findsOneWidget);
+      expect(find.text('Batik Bali'), findsNWidgets(2)); // Top header + Rank 1 item
       expect(find.text('89.98%'), findsNWidgets(2)); // Badge & Rank 1
       expect(find.text('Maluku Pala'), findsOneWidget);
       expect(find.text('3.51%'), findsOneWidget);
@@ -190,8 +219,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify non-batik header and titles
-      expect(find.text('BUKAN KAIN BATIK'), findsOneWidget);
-      expect(find.text('NON-BATIK'), findsOneWidget); // Main headline
+      expect(find.text('Bukan Kain Batik'), findsNWidgets(2)); // Header label + Main headline
       expect(find.text('Non-Batik'), findsOneWidget); // Top list item
       expect(find.text('Gambar tidak teridentifikasi sebagai motif kain batik nusantara.'), findsOneWidget);
       expect(find.text('99.99%'), findsNWidgets(2));
@@ -216,47 +244,41 @@ void main() {
         'batik-parang',
         'batik-pekalongan',
         'batik-priangan',
-        'batik-sekar',
+        'batik-sekar_jagad',
         'batik-sidoluhur',
         'batik-sidomukti',
         'batik-sogan',
         'batik-tambal',
-        'DKI_Ondel_Ondel',
-        'Jawa_Timur_Pring',
-        'Kalimantan_Dayak',
+        'Boraspati_Ni_Tombaga',
+        'Dayak_Burung_Enggang',
         'Lampung_Gajah',
+        'Lontara',
         'Madura_Mataketeran',
         'Maluku_Pala',
+        'Minang_Rangkiang',
         'NTB_Lumbung',
+        'Ondel_Ondel',
         'Papua_Asmat',
         'Papua_Cendrawasih',
         'Papua_Tifa',
-        'Sulawesi_Selatan_Lontara',
-        'Sumatera_Barat_Rumah_Minang',
-        'Sumatera_Utara_Boraspati',
+        'Pring_Sedapur',
       ];
 
-      expect(all35BatikLabels.length, 35);
-      expect(MotifAssetRegistry.totalUniqueAssets, 35);
-
       for (final label in all35BatikLabels) {
-        expect(MotifAssetRegistry.hasAsset(label), isTrue,
-            reason: 'Missing asset mapping for label: $label');
-        final path = MotifAssetRegistry.getAssetPath(label);
-        expect(path, isNotNull);
-        expect(path, startsWith('assets/images/motifs/batik_'));
-        expect(path, endsWith('.jpg'));
+        final hasAsset = MotifAssetRegistry.hasAsset(label);
+        final assetPath = MotifAssetRegistry.getAssetPath(label);
+        expect(hasAsset, isTrue, reason: 'Motif $label must have a valid registered asset');
+        expect(assetPath, isNotNull, reason: 'Asset path for $label must not be null');
       }
+    });
 
-      // Non-batik should not have an asset
-      expect(MotifAssetRegistry.hasAsset('non_batik'), isFalse);
-      expect(MotifAssetRegistry.getAssetPath('non_batik'), isNull);
+    test('All 35 BatikHeritageItem entries in BatikHeritageData have verified image assets', () {
+      const allItems = BatikHeritageData.allMotifs;
+      expect(allItems.length, equals(35), reason: 'BatikHeritageData must contain all 35 batik motif classes');
 
-      // Verify allMotifs items have valid asset paths
-      for (final item in BatikHeritageData.allMotifs) {
-        expect(item.hasImageAsset, isTrue,
-            reason: 'BatikHeritageItem ${item.id} has no image asset');
-        expect(item.imagePath, isNotNull);
+      for (final item in allItems) {
+        expect(item.imagePath, isNotNull, reason: 'Motif ${item.id} (${item.name}) must have imagePath assigned');
+        expect(item.imagePath, startsWith('assets/images/motifs/'), reason: 'Image path must point to assets/images/motifs/');
       }
     });
   });

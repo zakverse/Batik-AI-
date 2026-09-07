@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_theme.dart';
 
-/// HeritageBottomNav provides a 3-item cultural navigation bar:
-/// [ Beranda ]  [ LARGE SCAN BUTTON ]  [ Profil ]
+/// HeritageBottomNav — 3-item navigation:
+/// [ Beranda ]  [ ◉ SCAN FAB ]  [ Profil ]
+///
+/// Ensiklopedia diakses via Home → Eksplor Motif, atau Profile → Ensiklopedia Motif.
 class HeritageBottomNav extends StatelessWidget {
+  /// Tab index:
+  /// 0: Beranda
+  /// 1: Profil
   final int currentIndex;
   final ValueChanged<int> onTabSelected;
   final VoidCallback onScanPressed;
@@ -37,65 +42,69 @@ class HeritageBottomNav extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 72,
+          height: 68,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // 1. Beranda Tab (Left)
+              // 1. Beranda
               Expanded(
                 child: _buildNavItem(
-                  index: 0,
+                  isSelected: currentIndex == 0,
                   icon: Icons.home_outlined,
                   activeIcon: Icons.home_rounded,
                   label: 'Beranda',
+                  onTap: () => onTabSelected(0),
                 ),
               ),
 
-              // 2. Center Scan Action Button (Prominent Floating Circular FAB)
+              // 2. Center SCAN FAB
               GestureDetector(
                 onTap: onScanPressed,
-                child: Container(
-                  width: 62,
-                  height: 62,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        AppTheme.primaryColor,
-                        Color(0xFFA65A31),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppTheme.tertiaryColor,
-                      width: 2.8,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryColor.withValues(alpha: 0.38),
-                        blurRadius: 14,
-                        offset: const Offset(0, 5),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    width: 58,
+                    height: 58,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          AppTheme.primaryColor,
+                          Color(0xFFA65A31),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                    ],
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.crop_free_rounded,
-                      color: Colors.white,
-                      size: 30,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppTheme.goldenBatik,
+                        width: 2.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.40),
+                          blurRadius: 14,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.crop_free_rounded,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                     ),
                   ),
                 ),
               ),
 
-              // 3. Profil Tab (Right)
+              // 3. Profil
               Expanded(
                 child: _buildNavItem(
-                  index: 1,
+                  isSelected: currentIndex == 1,
                   icon: Icons.person_outline_rounded,
                   activeIcon: Icons.person_rounded,
                   label: 'Profil',
+                  onTap: () => onTabSelected(1),
                 ),
               ),
             ],
@@ -106,34 +115,34 @@ class HeritageBottomNav extends StatelessWidget {
   }
 
   Widget _buildNavItem({
-    required int index,
+    required bool isSelected,
     required IconData icon,
     required IconData activeIcon,
     required String label,
+    required VoidCallback onTap,
   }) {
-    final isSelected = currentIndex == index;
-
     return InkWell(
-      onTap: () => onTabSelected(index),
-      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               isSelected ? activeIcon : icon,
               color: isSelected ? AppTheme.primaryColor : const Color(0xFF8E8B92),
               size: 24,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                 color: isSelected ? AppTheme.primaryColor : const Color(0xFF8E8B92),
-                letterSpacing: 0.2,
+                letterSpacing: 0.1,
               ),
             ),
           ],
