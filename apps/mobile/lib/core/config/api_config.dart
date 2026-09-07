@@ -5,8 +5,8 @@
 /// - iOS Simulator    : 'http://localhost:8080'
 /// - Physical Device  : 'http://<YOUR-LOCAL-IP>:8080' (e.g. 'http://192.168.1.100:8080')
 class ApiConfig {
-  // Default to Android Emulator address (can be updated for physical device or iOS)
-  static const String baseUrl = 'http://10.0.2.2:8080';
+  // Base URL for API service (http://127.0.0.1:8080 works for Android Physical Device via ADB reverse, iOS Simulator, and Desktop)
+  static const String baseUrl = 'http://127.0.0.1:8080';
 
   // API Endpoints (36-Class Modern V2 API)
   static const String predictEndpoint = '$baseUrl/api/v2/predict';
