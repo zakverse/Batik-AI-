@@ -1,14 +1,14 @@
 <div align="center">
 
-# 🌿 Wastra AI — Intelligent Batik Recognition Platform
-### *Preserving Indonesian Cultural Heritage through Modern Deep Learning & Microservices*
+# 🌿 NusantaraKain — Intelligent Batik Recognition Platform
+### *Kenali. Lestarikan. Banggakan.*
 
-[![Wastra AI CI](https://github.com/zakverse/Batik-AI-/actions/workflows/ci.yml/badge.svg)](https://github.com/zakverse/Batik-AI-/actions/workflows/ci.yml)
+[![NusantaraKain CI](https://github.com/zakverse/Batik-AI-/actions/workflows/ci.yml/badge.svg)](https://github.com/zakverse/Batik-AI-/actions/workflows/ci.yml)
 [![Go Version](https://img.shields.io/badge/Go-1.22%2B%20%7C%201.25-00ADD8?style=flat&logo=go&logoColor=white)](https://go.dev/)
-[![Python Version](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![Flutter](https://img.shields.io/badge/Flutter-3.2%2B-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev/)
 [![ONNX Runtime](https://img.shields.io/badge/ONNX%20Runtime-v1.19.2-005CED?style=flat&logo=onnx&logoColor=white)](https://onnxruntime.ai/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.16%2B-FF6F00?style=flat&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111%2B-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/Docker-Compose%20Ready-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -16,16 +16,16 @@
 <br/>
 
 <p align="center">
-  <b>Wastra AI</b> adalah platform <i>end-to-end</i> berbasis <b>Deep Learning Vision</b> yang mengklasifikasikan <b>35 motif batik tradisional Nusantara</b> secara <i>real-time</i> dengan akurasi tinggi dan latensi rendah.
+  <b>NusantaraKain</b> adalah platform <i>end-to-end</i> berbasis <b>Deep Learning Vision</b> yang mengklasifikasikan <b>35 motif batik tradisional Nusantara + 1 kelas Non-Batik</b> secara <i>real-time</i> dengan akurasi tinggi dan latensi rendah.
 </p>
 
 ---
 
 ### 🌟 Key Performance Highlights
 
-| 🎯 Test Accuracy | 📊 Macro F1-Score | ⚡ Inference Latency | 🚀 Throughput | 🏛️ Dataset Classes |
+| 🎯 Test Accuracy | 📊 Macro F1-Score | 🏆 Non-Batik F1 | ⚡ Inference Latency | 🏛️ Dataset Classes |
 | :---: | :---: | :---: | :---: | :---: |
-| **86.05%** | **86.67%** | **6.47 ms** *(ONNX)* | **~154 FPS** *(CPU)* | **35 Motif Nusantara** |
+| **86.48%** | **0.8707** | **1.0000** | **~7.29 ms** *(ONNX)* | **36 Kelas (35 Batik + 1 Non-Batik)** |
 
 </div>
 
@@ -34,13 +34,14 @@
 ## 📑 Daftar Isi
 
 - [✨ Tentang Proyek](#-tentang-proyek)
-- [🏛️ Cakupan 35 Motif Batik](#️-cakupan-35-motif-batik)
+- [🏛️ Cakupan 36 Kelas Klasifikasi](#️-cakupan-36-kelas-klasifikasi)
 - [🏗️ Arsitektur Sistem](#️-arsitektur-sistem)
 - [📂 Struktur Monorepo](#-struktur-monorepo)
 - [🔬 Pipeline Machine Learning & Benchmarking](#-pipeline-machine-learning--benchmarking)
   - [1. Progres Model](#1-progres-model)
   - [2. Benchmark Latensi: Keras vs ONNX Runtime](#2-benchmark-latensi-keras-vs-onnx-runtime)
   - [3. Roadmap Notebooks](#3-roadmap-notebooks)
+- [📱 Mobile App — NusantaraKain](#-mobile-app--nusantarakain)
 - [🛠️ Tech Stack](#️-tech-stack)
 - [🚀 Panduan Memulai (Quick Start)](#-panduan-memulai-quick-start)
   - [Opsi 1: Menjalankan via Docker Compose (Rekomendasi)](#opsi-1-menjalankan-via-docker-compose-rekomendasi)
@@ -55,19 +56,22 @@
 
 Batik Indonesia adalah warisan budaya dunia takbenda (*Masterpiece of Oral and Intangible Heritage of Humanity*) yang diakui oleh UNESCO. Setiap motif batik mengandung nilai filosofis, sejarah, dan identitas daerah yang kaya. Namun, mengenali variasi motif batik Nusantara yang sangat beragam secara kasat mata sering kali menjadi tantangan bagi masyarakat luas.
 
-**Wastra AI** hadir sebagai solusi teknologi terpadu yang memadukan:
-1. **Computer Vision Mutakhir**: Menggunakan arsitektur *EfficientNetB0* yang di-fine-tune secara parsial untuk mengenali karakteristik visual motif batik yang kompleks.
-2. **High-Performance Inference**: Konversi model ke *ONNX Runtime* dengan backend Golang yang memangkas latensi hingga **6.47 ms** (**10x lebih cepat** dibanding TensorFlow Keras di CPU).
-3. **Clean Microservices Architecture**: Pemisahan yang rapi antara antarmuka mobile Flutter, API gateway & business logic Golang, serta pipeline ML terisolasi.
+**NusantaraKain** hadir sebagai gerakan digital untuk melestarikan wastra Nusantara melalui teknologi kecerdasan buatan (AI). Kami percaya bahwa kain batik bukan sekadar pakaian, tetapi warisan budaya adiluhung, identitas bangsa, dan cerita yang hidup.
+
+Platform ini memadukan:
+1. **Computer Vision Mutakhir**: Arsitektur *EfficientNetB0* yang di-fine-tune untuk mengenali karakteristik visual 35 motif batik + deteksi Non-Batik.
+2. **High-Performance Inference**: Konversi model ke *ONNX Runtime* dengan backend Golang, latensi **~7.29 ms** per inferensi.
+3. **Mobile App Production-Ready**: Aplikasi Flutter NusantaraKain dengan live camera scanner, ensiklopedia motif, dan edukasi budaya.
+4. **Clean Microservices Architecture**: Pemisahan rapi antara mobile Flutter, API gateway Golang, dan pipeline ML terisolasi.
 
 ---
 
-## 🏛️ Cakupan 35 Motif Batik
+## 🏛️ Cakupan 36 Kelas Klasifikasi
 
-Wastra AI dilatih untuk mengenali 35 motif batik dari berbagai penjuru wilayah Indonesia:
+NusantaraKain dilatih untuk mengenali **35 motif batik** dari berbagai penjuru Indonesia, ditambah **1 kelas Non-Batik** untuk deteksi citra yang bukan batik:
 
 <details>
-<summary><b>🔍 Klik untuk melihat daftar lengkap 35 motif batik berdasarkan daerah asal</b></summary>
+<summary><b>🔍 Klik untuk melihat daftar lengkap 36 kelas berdasarkan daerah asal</b></summary>
 <br/>
 
 | Wilayah Asal | Nama Motif Batik |
@@ -79,6 +83,7 @@ Wastra AI dilatih untuk mengenali 35 motif batik dari berbagai penjuru wilayah I
 | **Bali & Nusa Tenggara** | `Bali_Barong`, `batik-bali`, `NTB_Lumbung` |
 | **Kalimantan & Sulawesi** | `Kalimantan_Dayak`, `Sulawesi_Selatan_Lontara` |
 | **Maluku & Papua** | `Maluku_Pala`, `Papua_Asmat`, `Papua_Cendrawasih`, `Papua_Tifa`, `batik-cendrawasih` |
+| **Non-Batik** | `Non-Batik` *(deteksi citra yang bukan kain batik)* |
 
 </details>
 
@@ -86,20 +91,20 @@ Wastra AI dilatih untuk mengenali 35 motif batik dari berbagai penjuru wilayah I
 
 ## 🏗️ Arsitektur Sistem
 
-Sistem Wastra AI dibangun dengan prinsip **Separation of Concerns (SoC)** dan **Clean Architecture**:
+NusantaraKain dibangun dengan prinsip **Separation of Concerns (SoC)** dan **Clean Architecture**:
 
 ```mermaid
 graph TD
     subgraph Client Layer
-        Mobile["📱 Mobile App (Flutter)<br/>Riverpod • GoRouter • Dio • Clean Architecture"]
+        Mobile["📱 NusantaraKain Mobile App (Flutter)<br/>Camera Scanner • Encyclopedia • Result • Profile"]
     end
 
     subgraph Gateway & Business Logic Layer
-        GolangAPI["⚡ Backend REST API (Golang / Gin)<br/>JWT Auth • Business Logic • GORM • ONNX Engine"]
+        GolangAPI["⚡ Backend REST API (Golang / Gin)<br/>Business Logic • ONNX Engine • Multipart Handler"]
     end
 
     subgraph Machine Learning Layer
-        ONNXEngine["⚡ Native ONNX Runtime C-API (Golang)<br/>Latency: 6.47ms • 154 FPS"]
+        ONNXEngine["⚡ Native ONNX Runtime C-API (Golang)<br/>EfficientNetB0 36-Class • Latency: ~7.29ms"]
         MLService["🐍 ML Microservice (Python FastAPI)<br/>OpenCV • Pillow • TensorFlow Execution"]
     end
 
@@ -108,7 +113,7 @@ graph TD
         Storage["📁 Local Storage / Cloudinary<br/>Image Assets & Histori"]
     end
 
-    Mobile -->|"HTTP REST API (Bearer JWT / Multipart)"| GolangAPI
+    Mobile -->|"POST /api/v2/predict (Multipart)"| GolangAPI
     GolangAPI -->|"Direct Native Inference (Low Latency)"| ONNXEngine
     GolangAPI -.->|"Optional Distributed Inference"| MLService
     GolangAPI -->|"GORM Queries"| MySQL
@@ -129,8 +134,8 @@ Batik-AI/
 │   ├── ml-service/            # Python FastAPI Microservice (TensorFlow / Keras runtime)
 │   │   ├── app/               # API routes, inference pipeline, schemas
 │   │   └── requirements.txt   # Dependensi Python
-│   └── mobile/                # Mobile Client (Flutter 3.x - Feature-First + Riverpod)
-│       ├── lib/               # Core, Features (Auth, Scan, History, Detail, Profile)
+│   └── mobile/                # NusantaraKain Mobile App (Flutter 3.x)
+│       ├── lib/               # Screens, Widgets, Services, Core Theme & Data
 │       └── pubspec.yaml       # Dependensi Flutter
 ├── training/                  # ML Training Pipeline, Research & Experiments
 │   ├── notebooks/             # 11 Jupyter Notebooks terstruktur (00 s/d 10)
@@ -150,16 +155,16 @@ Batik-AI/
 
 ### 1. Progres Model
 
-Evolusi model Deep Learning yang dikembangkan dalam riset Wastra AI:
+Evolusi model Deep Learning yang dikembangkan dalam riset NusantaraKain:
 
 | Model | Arsitektur | Total Parameter | Test Accuracy | Macro F1 | Generalization Gap | Status |
 |---|---|---|:---:|:---:|:---:|:---:|
 | **Baseline CNN** | 4-Block Custom CNN (Scratch) | 427,299 | 3.31% | 0.025 | Underfitting | Baseline |
 | **EfficientNetB0 (Frozen)** | ImageNet Pretrained (Transfer Learning) | 4,099,526 | 69.96% | 0.698 | +4.12 pp | Baseline TL |
-| **EfficientNetB0 (Fine-Tuned)** | Top 25 Layers Unfrozen + Low LR | 4,099,526 | **86.05%** | **86.67%** | **-0.58 pp** | 🏆 **Production Model** |
+| **EfficientNetB0 (Fine-Tuned)** | Top 25 Layers Unfrozen + Low LR | 4,099,526 | **86.48%** | **0.8707** | **-0.58 pp** | 🏆 **Production Model** |
 
 > [!TIP]
-> Model **EfficientNetB0 Fine-Tuned** menghasilkan **Generalization Gap negatif (-0.58 pp)**, membuktikan bahwa model tidak mengalami *overfitting* dan memiliki kemampuan generalisasi yang sangat stabil pada unseen test data.
+> Model **EfficientNetB0 Fine-Tuned** menghasilkan **Generalization Gap negatif (-0.58 pp)**, membuktikan bahwa model tidak mengalami *overfitting* dan memiliki kemampuan generalisasi yang sangat stabil pada unseen test data. Non-Batik F1-Score mencapai **1.0000** (presisi sempurna).
 
 ---
 
@@ -169,13 +174,13 @@ Pengujian inferensi CPU pada 200 sampel citra uji:
 
 ```
 TensorFlow Keras (CPU) : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 64.80 ms  (15.4 FPS)
-ONNX Runtime (CPU)     : ▇▇ 6.47 ms                     (154.5 FPS)  [~10x FASTER 🚀]
+ONNX Runtime (CPU)     : ▇ ~7.29 ms                      (~137 FPS)  [~9x FASTER 🚀]
 ```
 
-| Runtime Engine | Total Waktu (200 Sampel) | Rata-Rata Latensi | Throughput (FPS) | Akselerasi |
-|---|:---:|:---:|:---:|:---:|
-| **TensorFlow / Keras** | 12.96 s | 64.80 ms | 15.43 FPS | Baseline (1.0x) |
-| **ONNX Runtime Engine** | **1.29 s** | **6.47 ms** | **154.53 FPS** | **~10.0x Lebih Cepat** ⚡ |
+| Runtime Engine | Rata-Rata Latensi | Throughput (FPS) | Akselerasi |
+|---|:---:|:---:|:---:|
+| **TensorFlow / Keras** | 64.80 ms | 15.43 FPS | Baseline (1.0x) |
+| **ONNX Runtime Engine** | **~7.29 ms** | **~137 FPS** | **~9x Lebih Cepat** ⚡ |
 
 ---
 
@@ -187,15 +192,46 @@ Seluruh tahapan eksperimen didokumentasikan dalam folder [`training/notebooks/`]
 |---|---|
 | [`00_dataset_audit.ipynb`](training/notebooks/00_dataset_audit.ipynb) | Verifikasi integritas data, validasi format berkas, deteksi corrupt files |
 | [`01_eda.ipynb`](training/notebooks/01_eda.ipynb) | Exploratory Data Analysis, distribusi kelas motif, aspek rasio, visualisasi citra |
-| [`02_preprocessing.ipynb`](training/notebooks/02_preprocessing.ipynb) | Pipeline resize (224x224), augmentasi visual, dan pembagian dataset (Train/Val/Test) |
+| [`02_preprocessing.ipynb`](training/notebooks/02_preprocessing.ipynb) | Pipeline resize (224×224), augmentasi visual, dan pembagian dataset (Train/Val/Test) |
 | [`03_baseline.ipynb`](training/notebooks/03_baseline.ipynb) | Pembuatan dan pelatihan model 4-Block Convolutional Neural Network dari awal |
 | [`04_efficientnet.ipynb`](training/notebooks/04_efficientnet.ipynb) | Transfer Learning EfficientNetB0 dengan bobot ImageNet (Feature Extractor) |
 | [`05_evaluation.ipynb`](training/notebooks/05_evaluation.ipynb) | Evaluasi komparasi Baseline vs EfficientNetB0 (Classification Report & Matrix) |
 | [`06_finetuning.ipynb`](training/notebooks/06_finetuning.ipynb) | Fine-tuning parsial (unfreezing top layers) dengan low learning rate & Adam optimizer |
-| [`07_final_evaluation.ipynb`](training/notebooks/07_final_evaluation.ipynb) | Evaluasi mendalam model fine-tuned pada unseen test dataset (Akurasi 86.05%) |
+| [`07_final_evaluation.ipynb`](training/notebooks/07_final_evaluation.ipynb) | Evaluasi mendalam model fine-tuned pada unseen test dataset (Akurasi 86.48%) |
 | [`08_final_analysis.ipynb`](training/notebooks/08_final_analysis.ipynb) | Analisis per-kelas, deteksi *high-confidence errors*, dan evaluasi *support vs recall* |
 | [`09_inference_export.ipynb`](training/notebooks/09_inference_export.ipynb) | Export pipeline inferensi end-to-end, metadata mapping, dan validasi visual |
 | [`10_model_conversion.ipynb`](training/notebooks/10_model_conversion.ipynb) | Konversi model Keras `.keras` ke format `.onnx` dan benchmark komparasi latensi |
+
+---
+
+## 📱 Mobile App — NusantaraKain
+
+Aplikasi mobile **NusantaraKain** dibangun dengan Flutter dan tersedia di [`apps/mobile/`](apps/mobile/).
+
+### Fitur Utama
+
+| Fitur | Deskripsi |
+|---|---|
+| 📷 **Live Camera Scanner** | Viewfinder real-time dengan golden scan bracket, torch, flip camera, dan gallery picker |
+| 🤖 **AI Classification** | Klasifikasi 36 kelas via POST `/api/v2/predict` ke backend Go + ONNX Runtime |
+| 📊 **Hasil Analisis** | Top-1 motif terdeteksi, confidence bar, Top-3 AI ranking, badge autentikasi |
+| 📚 **Edukasi Budaya** | Tab Filosofi / Sejarah / Karakteristik untuk setiap motif yang terdeteksi |
+| 🗺️ **Ensiklopedia Motif** | Jelajahi 35 ragam hias dengan filter wilayah (Jawa, Sumatera, Bali, Kalimantan, dll) |
+| 🏠 **Heritage Dashboard** | Motif Hari Ini, Quick Action, Kategori Wilayah, Motif Populer |
+| 👤 **Profil Pengguna** | Edit profil, statistik koleksi, panduan pindai, bantuan |
+
+### Navigasi
+
+```
+┌──────────────────────────────────────┐
+│  Beranda        ◉ SCAN        Profil │
+└──────────────────────────────────────┘
+```
+
+- **Beranda**: Heritage dashboard dengan hero card & motif populer
+- **SCAN FAB** (tengah): Live camera scanner → AI inference → Hasil analisis
+- **Profil**: User card, statistik, menu ensiklopedia & info aplikasi
+- **Ensiklopedia**: Diakses via Beranda → *Eksplor Motif* atau Profil → *Ensiklopedia Motif*
 
 ---
 
@@ -205,9 +241,9 @@ Seluruh tahapan eksperimen didokumentasikan dalam folder [`training/notebooks/`]
 
 | Kategori | Teknologi yang Digunakan |
 |---|---|
-| **Mobile Client** | Flutter 3.x, Dart, Riverpod, GoRouter, Dio, Shimmer, CachedNetworkImage |
-| **Backend & Gateway** | Golang (Go 1.22+ / 1.25), Gin Web Framework, GORM, ONNX Runtime Go |
-| **Machine Learning** | Python 3.10+, TensorFlow 2.16+, Keras, ONNX Runtime, OpenCV, Pillow, Scikit-Learn |
+| **Mobile App** | Flutter 3.x, Dart, Material 3, Camera, Image Picker |
+| **Backend & Gateway** | Golang (Go 1.22+ / 1.25), Gin Web Framework, ONNX Runtime Go |
+| **Machine Learning** | Python 3.10+, TensorFlow 2.16+, Keras, ONNX Runtime, OpenCV, Scikit-Learn |
 | **Database & Cache** | MySQL 8.0, phpMyAdmin |
 | **DevOps & Tooling** | Docker, Docker Compose, GitHub Actions (CI), Makefile |
 
@@ -260,11 +296,8 @@ cd apps/backend
 # Download dependensi Go
 go mod download
 
-# Menjalankan validasi ONNX engine test
-go run test_ort.go
-
 # Menjalankan HTTP REST Server
-go run cmd/server/main.go
+go run ./cmd/server
 ```
 *Server aktif di: `http://localhost:8080`*
 </details>
@@ -291,7 +324,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 </details>
 
 <details>
-<summary><b>3. Menjalankan Mobile App Flutter</b></summary>
+<summary><b>3. Menjalankan Mobile App NusantaraKain (Flutter)</b></summary>
 <br/>
 
 ```bash
@@ -300,9 +333,15 @@ cd apps/mobile
 # Ambil paket Flutter
 flutter pub get
 
+# Pastikan ADB reverse untuk koneksi ke backend lokal
+adb reverse tcp:8080 tcp:8080
+
 # Jalankan aplikasi (pada emulator atau device fisik)
 flutter run
 ```
+
+> [!NOTE]
+> Aplikasi menggunakan `http://127.0.0.1:8080` sebagai base URL backend. Jalankan `adb reverse tcp:8080 tcp:8080` agar device fisik dapat terhubung ke server lokal.
 </details>
 
 ---
@@ -322,10 +361,10 @@ Memeriksa status kesiapan server dan model.
   {
     "status": "ok",
     "model": "EfficientNetB0 Fine-Tuned",
-    "classes": 35,
-    "version": "1.0.0",
-    "test_accuracy": "86.05%",
-    "generalization_gap": "-0.58 pp (Pass)"
+    "classes": 36,
+    "version": "2.0.0",
+    "test_accuracy": "86.48%",
+    "macro_f1": "0.8707"
   }
   ```
 
@@ -334,14 +373,13 @@ Memeriksa status kesiapan server dan model.
 ### 2. Klasifikasi Citra Motif Batik (Inference)
 Mengunggah citra batik untuk dianalisis oleh model Deep Learning.
 
-- **Endpoint**: `POST /api/v1/predict?top_k=3`
+- **Endpoint**: `POST /api/v2/predict`
 - **Content-Type**: `multipart/form-data`
 - **Parameters**:
-  - `image` *(File, Required)*: Berkas citra (JPEG/PNG/WebP)
-  - `top_k` *(Query Int, Optional)*: Jumlah rekomendasi prediksi teratas (default: 3)
+  - `image` *(File, Required)*: Berkas citra (JPEG/PNG/WebP), max 10 MB
 - **Contoh Request**:
   ```bash
-  curl -X POST "http://localhost:8080/api/v1/predict?top_k=3" \
+  curl -X POST "http://localhost:8080/api/v2/predict" \
     -F "image=@sample_megamendung.jpg"
   ```
 - **Response (`200 OK`)**:
@@ -350,22 +388,15 @@ Mengunggah citra batik untuk dianalisis oleh model Deep Learning.
     "success": true,
     "prediction": {
       "class": "batik-megamendung",
-      "confidence": 0.9421
+      "confidence": 0.9421,
+      "is_batik": true
     },
     "top_predictions": [
-      {
-        "class": "batik-megamendung",
-        "confidence": 0.9421
-      },
-      {
-        "class": "batik-ciamis",
-        "confidence": 0.0312
-      },
-      {
-        "class": "batik-garutan",
-        "confidence": 0.0125
-      }
-    ]
+      { "class": "batik-megamendung", "confidence": 0.9421, "is_batik": true },
+      { "class": "batik-ciamis",      "confidence": 0.0312, "is_batik": true },
+      { "class": "batik-garutan",     "confidence": 0.0125, "is_batik": true }
+    ],
+    "inference_ms": 7.29
   }
   ```
 
@@ -385,9 +416,9 @@ Menguji performa waktu inferensi server secara berkala.
   {
     "success": true,
     "samples_count": 50,
-    "total_time_ms": 323.5,
-    "avg_latency_ms": 6.47,
-    "throughput_fps": 154.53,
+    "total_time_ms": 364.5,
+    "avg_latency_ms": 7.29,
+    "throughput_fps": 137.2,
     "sample_predicted_class": "batik-megamendung",
     "sample_confidence": 0.9421
   }
@@ -403,7 +434,7 @@ Variabel lingkungan dapat disesuaikan pada file `.env` di masing-masing service:
 |---|---|---|---|
 | **Backend** | `PORT` | `8080` | Port HTTP Server Golang |
 | **Backend** | `MODEL_PATH` | `model/efficientnetb0_finetuned.onnx` | Path ke model ONNX |
-| **Backend** | `CLASS_MAPPING_PATH` | `model/efficientnetb0_class_mapping.json` | Path ke JSON mapping 35 kelas |
+| **Backend** | `CLASS_MAPPING_PATH` | `model/efficientnetb0_class_mapping.json` | Path ke JSON mapping 36 kelas |
 | **Backend** | `ONNX_RUNTIME_PATH` | `model/onnxruntime.dll` | Path ke DLL/SO ONNX Runtime |
 | **Backend** | `MAX_UPLOAD_SIZE_MB` | `10` | Batas maksimum ukuran berkas upload |
 | **ML-Service** | `PORT` | `8000` | Port HTTP Server FastAPI |
@@ -417,4 +448,8 @@ Proyek ini dirilis di bawah lisensi [MIT License](LICENSE). Kontribusi dalam ben
 
 <div align="center">
   <sub>Dibangun dengan ❤️ untuk melestarikan dan mendigitalkan warisan budaya batik Indonesia.</sub>
+  <br/><br/>
+  <i>"Dari Kain, untuk Cerita yang Abadi."</i>
+  <br/>
+  <b>NusantaraKain v2.0.0</b>
 </div>
