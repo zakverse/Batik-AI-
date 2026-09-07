@@ -1,26 +1,35 @@
 import 'package:flutter/material.dart';
 
-/// AppTheme provides cohesive Material 3 theming for Wastra AI Batik,
+/// AppTheme provides cohesive Material 3 theming for NusantaraKain,
 /// featuring rich Indonesian batik-inspired earth, indigo, and golden accents.
 class AppTheme {
-  // Primary Batik Colors
-  static const Color primaryColor = Color(0xFF8D4925); // Deep Soga / Terracotta
+  // NusantaraKain Official Brand Palette
+  static const Color sogaTerracotta = Color(0xFF8D4925); // Soga Terracotta
+  static const Color royalIndigo = Color(0xFF1D3557);    // Royal Indigo
+  static const Color goldenBatik = Color(0xFFC8963E);     // Golden Batik
+  static const Color warmParchment = Color(0xFFF7F5F0);   // Warm Parchment
+  static const Color ivory = Color(0xFFFDFCFA);           // Ivory
+  static const Color museumNoir = Color(0xFF11141A);      // Museum Noir
+
+  // Semantic & Aliased Mappings
+  static const Color primaryColor = sogaTerracotta;
   static const Color primaryContainer = Color(0xFFFBEAE2);
   static const Color onPrimaryContainer = Color(0xFF381404);
 
-  static const Color secondaryColor = Color(0xFF1D3557); // Deep Royal Indigo
+  static const Color secondaryColor = royalIndigo;
   static const Color secondaryContainer = Color(0xFFDCE6F5);
   static const Color onSecondaryContainer = Color(0xFF091E3A);
 
-  static const Color tertiaryColor = Color(0xFFC8963E); // Golden Batik Accents
+  static const Color tertiaryColor = goldenBatik;
   static const Color tertiaryContainer = Color(0xFFFAF1E4);
   static const Color onTertiaryContainer = Color(0xFF4A340A);
 
-  static const Color surfaceColor = Color(0xFFFDFCFA);
+  static const Color surfaceColor = ivory;
   static const Color cardColor = Colors.white;
-  static const Color scaffoldBackgroundColor = Color(0xFFF7F5F0); // Warm Parchment
-  static const Color darkSurfaceColor = Color(0xFF11141A); // Museum Noir / Scanner Dark
-  static const Color darkCardColor = Color(0xFF1C222D);
+  static const Color scaffoldBackgroundColor = warmParchment;
+  static const Color darkSurfaceColor = museumNoir;
+  static const Color darkCardColor = Color(0xFF1A1F29);
+  static const Color warmBorderColor = Color(0xFFE8E2D8);
 
   // Success & Accent Colors
   static const Color confidenceHigh = Color(0xFF2E7D32); // Deep Green
