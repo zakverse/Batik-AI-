@@ -52,7 +52,7 @@ class _EncyclopediaScreenState extends State<EncyclopediaScreen> {
     return Scaffold(
       backgroundColor: AppTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Batik Encyclopedia'),
+        title: const Text('Ensiklopedia Motif'),
         centerTitle: true,
       ),
       body: SafeArea(
