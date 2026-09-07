@@ -8,57 +8,61 @@ import 'package:wastra_ai_mobile/screens/result_screen.dart';
 import 'package:wastra_ai_mobile/widgets/confidence_bar.dart';
 import 'package:wastra_ai_mobile/widgets/heritage_bottom_nav.dart';
 import 'package:wastra_ai_mobile/widgets/motif_hero_card.dart';
+import 'package:wastra_ai_mobile/core/data/motif_asset_registry.dart';
+import 'package:wastra_ai_mobile/core/data/batik_heritage_data.dart';
 
 void main() {
   group('App Smoke & Cultural Heritage Widget Tests', () {
-    testWidgets('WastraApp renders Heritage Dashboard with Hero and BottomNav', (WidgetTester tester) async {
+    testWidgets('WastraApp renders Heritage Dashboard with Hero and 3-item BottomNav', (WidgetTester tester) async {
       await tester.pumpWidget(const WastraApp());
       await tester.pumpAndSettle();
 
       // Check Branding & Header
-      expect(find.text('WARISAN NUSANTARA'), findsOneWidget);
-      expect(find.text('Wastra AI'), findsOneWidget);
+      expect(find.text('NusantaraKain'), findsOneWidget);
+      expect(find.text('Kenali. Lestarikan. Banggakan.'), findsOneWidget);
 
       // Check Motif of the Day Hero Card
       expect(find.byType(MotifHeroCard), findsOneWidget);
       expect(find.text('MOTIF OF THE DAY'), findsOneWidget);
       expect(find.text('Parang Rusak Barong'), findsOneWidget);
 
-      // Check Bottom Navigation
+      // Check 3-Item Bottom Navigation: Beranda, Center Scan FAB, Profil
       expect(find.byType(HeritageBottomNav), findsOneWidget);
-      expect(find.text('Heritage'), findsOneWidget);
-      expect(find.text('Library'), findsOneWidget);
-      expect(find.text('Profile'), findsOneWidget);
+      expect(find.text('Beranda'), findsOneWidget);
+      expect(find.byIcon(Icons.crop_free_rounded), findsOneWidget);
+      expect(find.text('Profil'), findsOneWidget);
 
       // Check Quick Scan Banner
       expect(find.text('Pindai Kain Batik Anda'), findsOneWidget);
       expect(find.text('Pindai'), findsOneWidget);
     });
 
-    testWidgets('Bottom navigation switches between Heritage, Library, and Profile', (WidgetTester tester) async {
+    testWidgets('Bottom navigation switches between Beranda and Profil, and opens Encyclopedia from Beranda', (WidgetTester tester) async {
       await tester.pumpWidget(const WastraApp());
       await tester.pumpAndSettle();
 
-      // 1. Initially on Heritage
+      // 1. Initially on Beranda
       expect(find.text('MOTIF OF THE DAY'), findsOneWidget);
 
-      // 2. Tap Library Tab
-      await tester.tap(find.text('Library'));
-      await tester.pumpAndSettle();
-      expect(find.text('Batik Encyclopedia'), findsOneWidget);
-      expect(find.text('Eksplorasi Wastra Nusantara'), findsOneWidget);
-
-      // 3. Tap Profile Tab
-      await tester.tap(find.text('Profile'));
+      // 2. Tap Profil Tab
+      await tester.tap(find.text('Profil'));
       await tester.pumpAndSettle();
       expect(find.text('Profil & Informasi Model'), findsOneWidget);
       expect(find.text('Spesifikasi Model & Benchmark'), findsOneWidget);
       expect(find.text('86.48%'), findsOneWidget);
 
-      // 4. Tap Heritage Tab to return
-      await tester.tap(find.text('Heritage'));
+      // 3. Tap Beranda Tab to return
+      await tester.tap(find.text('Beranda'));
       await tester.pumpAndSettle();
       expect(find.text('MOTIF OF THE DAY'), findsOneWidget);
+
+      // 4. Open Encyclopedia from Beranda via 'Lihat Semua'
+      await tester.ensureVisible(find.text('Lihat Semua'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Lihat Semua'), warnIfMissed: false);
+      await tester.pumpAndSettle();
+      expect(find.text('Batik Encyclopedia'), findsOneWidget);
+      expect(find.text('Eksplorasi Wastra Nusantara'), findsOneWidget);
     });
 
     testWidgets('EncyclopediaScreen renders search and filter chips', (WidgetTester tester) async {
@@ -191,6 +195,69 @@ void main() {
       expect(find.text('Non-Batik'), findsOneWidget); // Top list item
       expect(find.text('Gambar tidak teridentifikasi sebagai motif kain batik nusantara.'), findsOneWidget);
       expect(find.text('99.99%'), findsNWidgets(2));
+    });
+
+    test('MotifAssetRegistry has complete 35-class visual asset coverage', () {
+      const List<String> all35BatikLabels = [
+        'Aceh_Pintu_Aceh',
+        'Bali_Barong',
+        'batik-bali',
+        'batik-betawi',
+        'batik-celup',
+        'batik-cendrawasih',
+        'batik-ceplok',
+        'batik-ciamis',
+        'batik-garutan',
+        'batik-gentongan',
+        'batik-kawung',
+        'batik-keraton',
+        'batik-lasem',
+        'batik-megamendung',
+        'batik-parang',
+        'batik-pekalongan',
+        'batik-priangan',
+        'batik-sekar',
+        'batik-sidoluhur',
+        'batik-sidomukti',
+        'batik-sogan',
+        'batik-tambal',
+        'DKI_Ondel_Ondel',
+        'Jawa_Timur_Pring',
+        'Kalimantan_Dayak',
+        'Lampung_Gajah',
+        'Madura_Mataketeran',
+        'Maluku_Pala',
+        'NTB_Lumbung',
+        'Papua_Asmat',
+        'Papua_Cendrawasih',
+        'Papua_Tifa',
+        'Sulawesi_Selatan_Lontara',
+        'Sumatera_Barat_Rumah_Minang',
+        'Sumatera_Utara_Boraspati',
+      ];
+
+      expect(all35BatikLabels.length, 35);
+      expect(MotifAssetRegistry.totalUniqueAssets, 35);
+
+      for (final label in all35BatikLabels) {
+        expect(MotifAssetRegistry.hasAsset(label), isTrue,
+            reason: 'Missing asset mapping for label: $label');
+        final path = MotifAssetRegistry.getAssetPath(label);
+        expect(path, isNotNull);
+        expect(path, startsWith('assets/images/motifs/batik_'));
+        expect(path, endsWith('.jpg'));
+      }
+
+      // Non-batik should not have an asset
+      expect(MotifAssetRegistry.hasAsset('non_batik'), isFalse);
+      expect(MotifAssetRegistry.getAssetPath('non_batik'), isNull);
+
+      // Verify allMotifs items have valid asset paths
+      for (final item in BatikHeritageData.allMotifs) {
+        expect(item.hasImageAsset, isTrue,
+            reason: 'BatikHeritageItem ${item.id} has no image asset');
+        expect(item.imagePath, isNotNull);
+      }
     });
   });
 }
