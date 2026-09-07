@@ -3,7 +3,9 @@ import '../core/data/batik_heritage_data.dart';
 import '../core/theme/app_theme.dart';
 import 'batik_pattern_painter.dart';
 
-/// MotifCard renders an editorial card for a batik motif (compact grid or vertical list).
+/// MotifCard renders an editorial card for a batik motif using authentic photographic
+/// batik imagery as its background with subtle dark/indigo gradient overlays,
+/// falling back gracefully to procedural BatikPatternPainter if no asset is available.
 class MotifCard extends StatelessWidget {
   final BatikHeritageItem item;
   final bool isCompact;
@@ -24,6 +26,45 @@ class MotifCard extends StatelessWidget {
     return BatikPatternType.truntum;
   }
 
+  Widget _buildFallbackBackground() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            item.primaryColor,
+            item.primaryColor.withValues(alpha: 0.85),
+            const Color(0xFF141923),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: CustomPaint(
+        painter: BatikPatternPainter(
+          primaryColor: Colors.white,
+          accentColor: item.secondaryColor,
+          opacity: 0.20,
+          type: _getPatternType(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageBackground() {
+    final assetPath = item.imagePath;
+    if (assetPath == null) {
+      return _buildFallbackBackground();
+    }
+
+    return Image.asset(
+      assetPath,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return _buildFallbackBackground();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isCompact) {
@@ -38,104 +79,117 @@ class MotifCard extends StatelessWidget {
       child: Container(
         width: 175,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withValues(alpha: 0.08),
+            width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            // Decorative Batik Canvas Box
-            Container(
-              height: 105,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    item.primaryColor,
-                    item.primaryColor.withValues(alpha: 0.85),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            // 1. Real Batik Photographic Background
+            Positioned.fill(
+              child: _buildImageBackground(),
+            ),
+
+            // 2. Subtle Dark/Indigo Gradient Overlay (keeps pattern visible, text readable)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withValues(alpha: 0.18),
+                      const Color(0xFF111726).withValues(alpha: 0.65),
+                      const Color(0xFF0D111A).withValues(alpha: 0.92),
+                    ],
+                    stops: const [0.0, 0.50, 1.0],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: BatikPatternPainter(
-                        primaryColor: Colors.white,
-                        accentColor: item.secondaryColor,
-                        opacity: 0.18,
-                        type: _getPatternType(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.25),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        item.island,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
 
-            // Text Info
-            Padding(
-              padding: const EdgeInsets.all(12),
+            // 3. Top Island Tag Pill
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.45),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    width: 0.8,
+                  ),
+                ),
+                child: Text(
+                  item.island.toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+              ),
+            ),
+
+            // 4. Bottom Motif & Region Information
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Secondary Label: Region / Province
                   Text(
                     item.region,
                     style: TextStyle(
                       fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.primaryColor.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.tertiaryColor.withValues(alpha: 0.95),
+                      letterSpacing: 0.2,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 2),
+
+                  // Primary Headline: Motif Name
                   Text(
                     item.name,
                     style: const TextStyle(
-                      fontSize: 14.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1C1B1F),
+                      color: Colors.white,
+                      letterSpacing: -0.2,
+                      height: 1.15,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
+
+                  // Category Tag
                   Text(
                     item.category,
                     style: TextStyle(
-                      fontSize: 11.5,
-                      color: Colors.grey[600],
+                      fontSize: 10.5,
+                      color: Colors.white.withValues(alpha: 0.75),
+                      fontWeight: FontWeight.w500,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -154,85 +208,92 @@ class MotifCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
+        height: 175,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(22),
           border: Border.all(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withValues(alpha: 0.08),
+            width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            // Top Pattern Header
-            Container(
-              height: 120,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    item.primaryColor,
-                    item.primaryColor.withValues(alpha: 0.8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            // 1. Real Batik Photographic Background
+            Positioned.fill(
+              child: _buildImageBackground(),
+            ),
+
+            // 2. Subtle Dark / Indigo Gradient Overlay
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withValues(alpha: 0.22),
+                      const Color(0xFF131D31).withValues(alpha: 0.70),
+                      const Color(0xFF0E131F).withValues(alpha: 0.94),
+                    ],
+                    stops: const [0.0, 0.45, 1.0],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
               ),
-              child: Stack(
+            ),
+
+            // 3. Top Badges (Category Tag & Island)
+            Positioned(
+              top: 14,
+              left: 16,
+              right: 16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: BatikPatternPainter(
-                        primaryColor: Colors.white,
-                        accentColor: item.secondaryColor,
-                        opacity: 0.20,
-                        type: _getPatternType(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppTheme.tertiaryColor.withValues(alpha: 0.4),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      item.tag.toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 12,
-                    left: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.35),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        item.tag.toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 12,
-                    right: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.40),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
                         color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
+                        width: 0.8,
                       ),
-                      child: Text(
-                        '${item.island} • ${item.region}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    ),
+                    child: Text(
+                      '${item.island} • ${item.region}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -240,49 +301,69 @@ class MotifCard extends StatelessWidget {
               ),
             ),
 
-            // Card Body
-            Padding(
-              padding: const EdgeInsets.all(16),
+            // 4. Card Content: Motif Name & Narrative
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 14,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
-                        child: Text(
-                          item.name,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF1C1B1F),
-                            letterSpacing: -0.2,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.name,
+                              style: const TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                letterSpacing: -0.3,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${item.category} • ${item.province}',
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.tertiaryColor.withValues(alpha: 0.95),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
                       ),
-                      const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                        color: AppTheme.primaryColor,
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 13,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Kategori: ${item.category}',
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.tertiaryColor.withValues(alpha: 0.9),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   Text(
                     item.shortDescription,
                     style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey[700],
-                      height: 1.4,
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.82),
+                      height: 1.35,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

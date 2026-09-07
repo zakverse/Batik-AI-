@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/heritage_bottom_nav.dart';
-import 'encyclopedia_screen.dart';
 import 'home_screen.dart';
 import 'profile_screen.dart';
 import 'scanner_screen.dart';
 
-/// MainNavigationScreen orchestrates the bottom navigation among Heritage, Library, Profile, and Scan.
+/// MainNavigationScreen orchestrates the 3-item navigation between Beranda, Scan, and Profil.
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -29,7 +28,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         index: _currentIndex,
         children: [
           HomeScreen(onScanPressed: _onScanPressed),
-          const EncyclopediaScreen(),
           const ProfileScreen(),
         ],
       ),

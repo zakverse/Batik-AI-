@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/data/batik_heritage_data.dart';
 import '../core/theme/app_theme.dart';
 import '../models/prediction_response.dart';
 import 'confidence_bar.dart';
@@ -24,6 +25,7 @@ class PredictionCard extends StatelessWidget {
 
     final mainPrediction = topPrediction ?? topList.first;
     final isBatik = mainPrediction.isBatik;
+    final heritageItem = isBatik ? BatikHeritageData.lookup(mainPrediction.label) : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -91,6 +93,17 @@ class PredictionCard extends StatelessWidget {
                     fontSize: 24,
                   ),
                 ),
+                if (isBatik && heritageItem != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    '${heritageItem.region} • ${heritageItem.province}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.primaryColor.withValues(alpha: 0.85),
+                    ),
+                  ),
+                ],
                 if (!isBatik) ...[
                   const SizedBox(height: 6),
                   Text(

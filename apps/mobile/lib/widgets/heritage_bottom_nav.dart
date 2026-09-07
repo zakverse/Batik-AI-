@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_theme.dart';
 
-/// HeritageBottomNav provides a 4-tab cultural navigation bar with a prominent Scan button.
+/// HeritageBottomNav provides a 3-item cultural navigation bar:
+/// [ Beranda ]  [ LARGE SCAN BUTTON ]  [ Profil ]
 class HeritageBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTabSelected;
@@ -36,24 +37,26 @@ class HeritageBottomNav extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 68,
+          height: 72,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // 1. Heritage Tab
-              _buildNavItem(
-                index: 0,
-                icon: Icons.museum_outlined,
-                activeIcon: Icons.museum_rounded,
-                label: 'Heritage',
+              // 1. Beranda Tab (Left)
+              Expanded(
+                child: _buildNavItem(
+                  index: 0,
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home_rounded,
+                  label: 'Beranda',
+                ),
               ),
 
-              // 2. Scan Button (Elevated Cultural Center Action)
+              // 2. Center Scan Action Button (Prominent Floating Circular FAB)
               GestureDetector(
                 onTap: onScanPressed,
                 child: Container(
-                  width: 54,
-                  height: 54,
+                  width: 62,
+                  height: 62,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [
@@ -66,38 +69,34 @@ class HeritageBottomNav extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: AppTheme.tertiaryColor,
-                      width: 2.2,
+                      width: 2.8,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryColor.withValues(alpha: 0.35),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        color: AppTheme.primaryColor.withValues(alpha: 0.38),
+                        blurRadius: 14,
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.crop_free_rounded,
-                    color: Colors.white,
-                    size: 26,
+                  child: const Center(
+                    child: Icon(
+                      Icons.crop_free_rounded,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),
 
-              // 3. Library Tab
-              _buildNavItem(
-                index: 1,
-                icon: Icons.menu_book_outlined,
-                activeIcon: Icons.menu_book_rounded,
-                label: 'Library',
-              ),
-
-              // 4. Profile Tab
-              _buildNavItem(
-                index: 2,
-                icon: Icons.person_outline_rounded,
-                activeIcon: Icons.person_rounded,
-                label: 'Profile',
+              // 3. Profil Tab (Right)
+              Expanded(
+                child: _buildNavItem(
+                  index: 1,
+                  icon: Icons.person_outline_rounded,
+                  activeIcon: Icons.person_rounded,
+                  label: 'Profil',
+                ),
               ),
             ],
           ),
@@ -131,7 +130,7 @@ class HeritageBottomNav extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                 color: isSelected ? AppTheme.primaryColor : const Color(0xFF8E8B92),
                 letterSpacing: 0.2,

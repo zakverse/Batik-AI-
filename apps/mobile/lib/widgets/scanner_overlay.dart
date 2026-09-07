@@ -9,7 +9,7 @@ class ScannerOverlay extends StatefulWidget {
   const ScannerOverlay({
     super.key,
     this.isScanning = true,
-    this.statusText = 'POSISIKAN KAIN BATIK DALAM BINGKAI',
+    this.statusText = 'ARAHKAN KAIN BATIK KE DALAM BINGKAI',
   });
 
   @override

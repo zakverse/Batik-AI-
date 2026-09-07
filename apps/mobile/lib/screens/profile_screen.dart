@@ -81,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Wastra AI Batik',
+                                  'NusantaraKain',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -90,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 2),
                                 Text(
-                                  'Cultural Heritage Classifier',
+                                  'Kenali. Lestarikan. Banggakan.',
                                   style: TextStyle(
                                     color: AppTheme.tertiaryColor,
                                     fontSize: 12.5,
@@ -103,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Sistem visi komputer berbasis kecerdasan buatan untuk pelestarian, dokumentasi, dan edukasi motif wastra batik Nusantara.',
+                          'Gerakan digital pelestarian wastra adiluhung Nusantara. Menggabungkan kurasi arsip budaya dan kecerdasan buatan untuk mengenali, mendokumentasikan, dan membanggakan warisan kain batik Indonesia.',
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 13,

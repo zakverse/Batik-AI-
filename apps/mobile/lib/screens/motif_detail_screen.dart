@@ -46,32 +46,44 @@ class MotifDetailScreen extends StatelessWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
+                  // Real Photographic Background
+                  if (item.imagePath != null)
+                    Positioned.fill(
+                      child: Image.asset(
+                        item.imagePath!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                      ),
+                    ),
+
                   // Gradient Backdrop
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          item.primaryColor,
-                          item.primaryColor.withValues(alpha: 0.85),
+                          item.primaryColor.withValues(alpha: item.imagePath != null ? 0.65 : 1.0),
+                          const Color(0xFF131821).withValues(alpha: item.imagePath != null ? 0.85 : 0.85),
                           const Color(0xFF131821),
                         ],
+                        stops: const [0.0, 0.6, 1.0],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
                     ),
                   ),
 
-                  // Procedural Batik Canvas
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: BatikPatternPainter(
-                        primaryColor: Colors.white,
-                        accentColor: item.secondaryColor,
-                        opacity: 0.18,
-                        type: _getPatternType(),
+                  // Procedural Batik Canvas (Fallback or subtle watermark)
+                  if (item.imagePath == null)
+                    Positioned.fill(
+                      child: CustomPaint(
+                        painter: BatikPatternPainter(
+                          primaryColor: Colors.white,
+                          accentColor: item.secondaryColor,
+                          opacity: 0.18,
+                          type: _getPatternType(),
+                        ),
                       ),
                     ),
-                  ),
 
                   // Region & Tag Floating Overlay
                   Positioned(

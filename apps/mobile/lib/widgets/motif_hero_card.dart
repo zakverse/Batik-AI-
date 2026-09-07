@@ -42,17 +42,45 @@ class MotifHeroCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
-            // Procedural Batik Watermark Vector Canvas
-            const Positioned.fill(
-              child: CustomPaint(
-                painter: BatikPatternPainter(
-                  primaryColor: Colors.white,
-                  accentColor: AppTheme.tertiaryColor,
-                  opacity: 0.08,
-                  type: BatikPatternType.parang,
+            // Real Photographic Batik Texture
+            if (item.imagePath != null)
+              Positioned.fill(
+                child: Image.asset(
+                  item.imagePath!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                ),
+              ),
+
+            // Semi-Transparent Dark Indigo Tint Overlay
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF1D3557).withValues(alpha: item.imagePath != null ? 0.78 : 1.0),
+                      const Color(0xFF16253C).withValues(alpha: item.imagePath != null ? 0.88 : 1.0),
+                      const Color(0xFF0F1826).withValues(alpha: item.imagePath != null ? 0.94 : 1.0),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
               ),
             ),
+
+            // Procedural Batik Watermark Vector Canvas (Subtle Accents)
+            if (item.imagePath == null)
+              const Positioned.fill(
+                child: CustomPaint(
+                  painter: BatikPatternPainter(
+                    primaryColor: Colors.white,
+                    accentColor: AppTheme.tertiaryColor,
+                    opacity: 0.08,
+                    type: BatikPatternType.parang,
+                  ),
+                ),
+              ),
 
             // Subtle Light Radial Gradient
             Positioned(

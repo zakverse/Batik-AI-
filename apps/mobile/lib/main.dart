@@ -21,7 +21,7 @@ class WastraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wastra AI Batik',
+      title: 'NusantaraKain',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const MainNavigationScreen(),

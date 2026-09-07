@@ -26,6 +26,8 @@ class _EncyclopediaScreenState extends State<EncyclopediaScreen> {
     'Kalimantan',
     'Papua',
     'Maluku',
+    'Nusa Tenggara',
+    'Sulawesi',
   ];
 
   @override
