@@ -46,7 +46,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: AppTheme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Hasil Analisis Wastra'),
+        title: const Text('Hasil Analisis'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
@@ -56,14 +56,11 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
           IconButton(
             icon: const Icon(Icons.share_rounded),
             tooltip: 'Bagikan Hasil',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Membagikan hasil klasifikasi wastra.'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            },
+            onPressed: () => _showShareSheet(
+              context,
+              topPred?.formattedClassName ?? 'Kain Batik',
+              topPred?.confidencePercentage ?? '0%',
+            ),
           ),
         ],
       ),
@@ -110,7 +107,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                       Positioned(
                         bottom: -12,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                           decoration: BoxDecoration(
                             color: isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor,
                             borderRadius: BorderRadius.circular(16),
@@ -132,12 +129,12 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                isBatik ? 'TEXTILE AUTHENTICATED' : 'NON-BATIK DETECTED',
+                                isBatik ? 'Tekstil Terautentikasi' : 'Bukan Batik',
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.5,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.3,
                                 ),
                               ),
                             ],
@@ -303,6 +300,69 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
           ),
         ),
       ),
+    );
+  }
+
+  void _showShareSheet(BuildContext context, String motifName, String confidence) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Bagikan Hasil Analisis',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.museumNoir,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Hasil klasifikasi AI untuk motif $motifName ($confidence).',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade700,
+                  height: 1.35,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.pop(ctx),
+                icon: const Icon(Icons.check_rounded, size: 18),
+                label: const Text('Selesai'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.sogaTerracotta,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

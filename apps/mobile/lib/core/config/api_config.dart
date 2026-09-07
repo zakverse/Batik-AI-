@@ -1,4 +1,4 @@
-/// Centralized API configuration for Wastra AI Batik.
+/// Centralized API configuration for NusantaraKain.
 ///
 /// For development:
 /// - Android Emulator : 'http://10.0.2.2:8080'

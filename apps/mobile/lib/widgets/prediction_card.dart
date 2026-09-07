@@ -57,9 +57,9 @@ class PredictionCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          isBatik ? 'MOTIF TERDETEKSI' : 'BUKAN KAIN BATIK',
+                          isBatik ? 'Motif Terdeteksi' : 'Bukan Kain Batik',
                           style: theme.textTheme.labelLarge?.copyWith(
-                            letterSpacing: 1.1,
+                            letterSpacing: 0.5,
                             color: isBatik ? AppTheme.primaryColor : AppTheme.secondaryColor,
                             fontWeight: FontWeight.w800,
                           ),
@@ -84,13 +84,13 @@ class PredictionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Text(
-                  isBatik ? mainPrediction.formattedClassName.toUpperCase() : 'NON-BATIK',
+                  isBatik ? mainPrediction.formattedClassName : 'Bukan Kain Batik',
                   style: theme.textTheme.headlineMedium?.copyWith(
-                    color: const Color(0xFF1C1B1F),
+                    color: AppTheme.museumNoir,
                     fontWeight: FontWeight.w800,
-                    fontSize: 24,
+                    fontSize: 22,
                   ),
                 ),
                 if (isBatik && heritageItem != null) ...[

@@ -22,7 +22,7 @@ class ApiException implements Exception {
   String toString() => message;
 }
 
-/// Service class responsible for all network interactions with the Wastra AI Golang backend.
+/// Service class responsible for all network interactions with the NusantaraKain Golang backend.
 class ApiService {
   final http.Client _client;
 

@@ -8,7 +8,7 @@ import '../widgets/scanner_overlay.dart';
 import 'preview_screen.dart';
 
 /// ScannerScreen provides a live in-app camera viewfinder & gallery scanner experience
-/// with cultural heritage styling and gold animated brackets.
+/// with cultural heritage styling, golden animated brackets, and flashlight support.
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
 
@@ -25,6 +25,7 @@ class _ScannerScreenState extends State<ScannerScreen>
   bool _isInitializing = true;
   String? _errorMessage;
 
+  bool _isTorchOn = false;
   bool _isCapturing = false;
   bool _isPickingGallery = false;
   final ImagePicker _galleryPicker = ImagePicker();
@@ -57,6 +58,7 @@ class _ScannerScreenState extends State<ScannerScreen>
       if (mounted) {
         setState(() {
           _isCameraInitialized = false;
+          _isTorchOn = false;
         });
       }
     } else if (state == AppLifecycleState.resumed) {
@@ -130,6 +132,7 @@ class _ScannerScreenState extends State<ScannerScreen>
         _isCameraInitialized = true;
         _isInitializing = false;
         _errorMessage = null;
+        _isTorchOn = false;
       });
     } on CameraException catch (e) {
       if (!mounted) return;
@@ -182,6 +185,24 @@ class _ScannerScreenState extends State<ScannerScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
+  }
+
+  /// Toggles hardware torch / flashlight if available.
+  Future<void> _toggleTorch() async {
+    final controller = _controller;
+    if (controller == null || !controller.value.isInitialized) return;
+
+    try {
+      final nextTorch = !_isTorchOn;
+      await controller.setFlashMode(nextTorch ? FlashMode.torch : FlashMode.off);
+      if (!mounted) return;
+      setState(() {
+        _isTorchOn = nextTorch;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      _showSnackBar('Lampu kilat tidak didukung pada kamera ini.');
+    }
   }
 
   /// Takes a high-resolution photo using CameraController and transitions to PreviewScreen.
@@ -281,6 +302,10 @@ class _ScannerScreenState extends State<ScannerScreen>
         backgroundColor: AppTheme.darkSurfaceColor,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: const Text(
           'Pindai Kain Batik',
           style: TextStyle(
@@ -290,6 +315,17 @@ class _ScannerScreenState extends State<ScannerScreen>
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              _isTorchOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+              color: _isTorchOn ? AppTheme.goldenBatik : Colors.white70,
+              size: 22,
+            ),
+            onPressed: _isCameraInitialized ? _toggleTorch : null,
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -301,38 +337,52 @@ class _ScannerScreenState extends State<ScannerScreen>
 
               // 2. Viewfinder Overlay with Golden Brackets & Animated Laser
               const ScannerOverlay(
-                statusText: 'ARAHKAN KAIN BATIK KE DALAM BINGKAI',
+                statusText: 'Arahkan kain batik ke dalam bingkai',
               ),
 
-              // 3. Bottom Action Bar for Camera & Gallery
+              // 3. Bottom Action Bar for Camera & Gallery with Instructional Tip
               Positioned(
-                bottom: 36,
-                left: 24,
-                right: 24,
+                bottom: 34,
+                left: 20,
+                right: 20,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Instruction Tag
+                    // Bottom Tip Pill matching prototype reference
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.5),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.60),
+                        color: Colors.black.withValues(alpha: 0.65),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.18),
+                          color: Colors.white.withValues(alpha: 0.15),
+                          width: 1,
                         ),
                       ),
-                      child: const Text(
-                        'Arahkan kain batik ke dalam bingkai',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.2,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.lightbulb_outline_rounded,
+                            color: AppTheme.goldenBatik.withValues(alpha: 0.9),
+                            size: 15,
+                          ),
+                          const SizedBox(width: 6),
+                          const Flexible(
+                            child: Text(
+                              'Tips: Pastikan pencahayaan cukup dan motif terlihat jelas.',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 20),
 
                     // Triple Action Controls: [ Galeri ]  [ CAMERA / SHUTTER ]  [ Ganti Kamera ]
                     Row(
@@ -475,20 +525,20 @@ class _ScannerScreenState extends State<ScannerScreen>
     return GestureDetector(
       onTap: canTap ? onTap : null,
       child: Container(
-        width: 72,
-        height: 72,
+        width: 74,
+        height: 74,
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
             color: canTap ? AppTheme.tertiaryColor : Colors.white24,
-            width: 3,
+            width: 3.2,
           ),
           boxShadow: canTap
               ? [
                   BoxShadow(
-                    color: AppTheme.tertiaryColor.withValues(alpha: 0.4),
-                    blurRadius: 16,
+                    color: AppTheme.tertiaryColor.withValues(alpha: 0.45),
+                    blurRadius: 18,
                     spreadRadius: 2,
                   ),
                 ]
@@ -525,7 +575,7 @@ class _ScannerScreenState extends State<ScannerScreen>
               : const Icon(
                   Icons.camera_alt_rounded,
                   color: Colors.white,
-                  size: 30,
+                  size: 32,
                 ),
         ),
       ),
